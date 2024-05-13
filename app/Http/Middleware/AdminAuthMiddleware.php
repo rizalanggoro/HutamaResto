@@ -19,6 +19,6 @@ class AdminAuthMiddleware {
             if ($role === 1) return $next($request);
         }
 
-        return redirect()->intended(route('login'));
+        return redirect()->intended(route('admin.login'));
     }
 }

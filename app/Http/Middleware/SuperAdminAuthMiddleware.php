@@ -19,6 +19,6 @@ class SuperAdminAuthMiddleware {
             if ($role === 0) return $next($request);
         }
 
-        return redirect()->intended(route('login'));
+        return redirect()->intended(route('superadmin.login'));
     }
 }
