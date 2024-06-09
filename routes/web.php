@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomerAuthController;
 use App\Http\Controllers\CustomerLoginController;
 use App\Http\Controllers\CustomerRegisterController;
+use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\AdminAuthMiddleware;
 use App\Http\Middleware\CustomerAuthMiddleware;
@@ -17,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 // all roles
-Route::get('/', fn () => Inertia::render('LandingPage'))->name('home');
+Route::get('/', [LandingPageController::class, 'show'])->name('home');
 
 // authentication
 Route::get('login', [AuthController::class, 'showCustomerLogin'])->name('login');
@@ -35,14 +36,10 @@ Route::post('register', [AuthController::class, 'register'])->name('register');
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
 // customer
-Route::middleware([CustomerAuthMiddleware::class])->group(function () {
-  Route::get('dashboard', fn () => Inertia::render('Customer/Dashboard', ['user' => Auth::user()]))->name('dashboard');
-});
+require __DIR__ . '/customer.php';
 
 // admin
-Route::middleware([AdminAuthMiddleware::class])->prefix('admin')->group(function () {
-  Route::get('dashboard', fn () => Inertia::render('Admin/Dashboard'))->name('admin.dashboard');
-});
+require __DIR__ . '/admin.php';
 
 // super admin
 Route::middleware(SuperAdminAuthMiddleware::class)->prefix('superadmin')->group(function () {

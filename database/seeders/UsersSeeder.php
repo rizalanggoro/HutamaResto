@@ -16,14 +16,18 @@ class UsersSeeder extends Seeder {
             'email' => 'customer@example.com',
             'id_role' => 0,
         ]);
+
+        for ($a = 0; $a < 5; $a++) {
+            User::factory()->create([
+                'name' => 'Admin ' . ($a + 1) . ' User',
+                'email' => 'admin' . ($a + 1) . '@example.com',
+                'id_role' => 1,
+            ]);
+        }
+
         User::factory()->create([
-            'name' => 'Admin User',
-            'email' => 'admin@example.com',
-            'id_role' => 1,
-        ]);
-        User::factory()->create([
-            'name' => 'Central Admin User',
-            'email' => 'centraladmin@example.com',
+            'name' => 'Superadmin User',
+            'email' => 'superadmin@example.com',
             'id_role' => 2,
         ]);
     }

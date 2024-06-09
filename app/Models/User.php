@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -32,6 +33,14 @@ class User extends Authenticatable {
         'remember_token',
     ];
 
+    public function role(): HasOne {
+        return $this->hasOne(Role::class, 'id', 'id_role');
+    }
+
+    public function franchise(): BelongsToMany {
+        return $this->belongsToMany(Franchise::class, 'admin_franchise', 'id_admin', 'id_franchise');
+    }
+
     /**
      * Get the attributes that should be cast.
      *
@@ -42,9 +51,5 @@ class User extends Authenticatable {
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
-    }
-
-    public function role(): HasOne {
-        return $this->hasOne(Role::class, 'id', 'id_role');
     }
 }

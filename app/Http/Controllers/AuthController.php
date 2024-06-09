@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -34,6 +35,11 @@ class AuthController extends Controller {
             'email' => ['email', 'string', 'required'],
             'password' => ['string', 'required'],
             'role' => ['numeric', 'required'],
+        ], [
+            'email.email' => 'Alamat email tidak valid!',
+            'email.required' => 'Alamat email tidak boleh kosong!',
+            'email.string' => 'Alamat email tidak boleh kosong!',
+            'password.required' => 'Kata sandi tidak boleh kosong!', 'password.string' => 'Kata sandi tidak boleh kosong!'
         ]);
 
         if (Auth::attempt([
@@ -52,9 +58,7 @@ class AuthController extends Controller {
             return redirect()->intended(route($route));
         }
 
-        return back()->withErrors([
-            'email' => 'Alamat email tidak valid!',
-        ]);
+        return back()->withErrors(['email' => 'Informasi yang Anda masukkan tidak valid!']);
     }
 
     public function register(Request $request) {
