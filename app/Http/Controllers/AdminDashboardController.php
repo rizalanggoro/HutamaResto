@@ -7,9 +7,11 @@ use Inertia\Inertia;
 
 class AdminDashboardController extends Controller {
     public function show() {
-        $franchise = Auth::user()->franchise()->get();
+        $user = Auth::user();
+        $franchise = $user->franchise()->first();
 
         return Inertia::render('Admin/Dashboard/Index', [
+            'user' => $user,
             'franchise' => $franchise,
         ]);
     }
