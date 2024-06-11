@@ -1,10 +1,10 @@
 import Container from "@/Components/Container";
 import Navbar from "@/Components/Navbar";
-import { Button } from "@/Components/ui/button";
-import { ScrollArea } from "@/Components/ui/scroll-area";
-import { Toaster } from "@/Components/ui/toaster";
-import { Link } from "@inertiajs/react";
-import { Home, ListChecks, Percent, UtensilsCrossed } from "lucide-react";
+import {Button} from "@/Components/ui/button";
+import {ScrollArea} from "@/Components/ui/scroll-area";
+import {Toaster} from "@/Components/ui/toaster";
+import {Link} from "@inertiajs/react";
+import {Home, Info, ListChecks, Percent, UtensilsCrossed} from "lucide-react";
 import React from "react";
 
 type Props = {
@@ -19,29 +19,34 @@ const menus: {
     {
         title: "Halaman utama",
         route: "admin.dashboard",
-        icon: <Home className="w-4 h-4 mr-4" />,
+        icon: <Home className="w-4 h-4 mr-4"/>,
     },
     {
         title: "Daftar pesanan",
         route: "admin.dashboard.order",
-        icon: <ListChecks className="w-4 h-4 mr-4" />,
+        icon: <ListChecks className="w-4 h-4 mr-4"/>,
     },
     {
         title: "Daftar menu",
         route: "admin.dashboard.menu",
-        icon: <UtensilsCrossed className="w-4 h-4 mr-4" />,
+        icon: <UtensilsCrossed className="w-4 h-4 mr-4"/>,
     },
     {
         title: "Daftar promo",
         route: "admin.dashboard.promo",
-        icon: <Percent className="w-4 h-4 mr-4" />,
+        icon: <Percent className="w-4 h-4 mr-4"/>,
+    },
+    {
+        title: "Profil restoran",
+        route: "admin.dashboard.profile",
+        icon: <Info className="w-4 h-4 mr-4"/>,
     },
 ];
 
-export default function DashboardAdminLayout({ children }: Props) {
+export default function DashboardAdminLayout({children}: Props) {
     return (
         <>
-            <Navbar variant="xl" />
+            <Navbar variant="xl"/>
             <Container variant="xl" className="h-screen grid grid-cols-12">
                 <div className="col-span-3 pt-16">
                     <ScrollArea className="w-full h-[calc(100vh-4rem)]">
@@ -75,7 +80,7 @@ export default function DashboardAdminLayout({ children }: Props) {
                     </ScrollArea>
                 </div>
             </Container>
-            <Toaster />
+            <Toaster/>
         </>
     );
 }

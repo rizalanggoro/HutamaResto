@@ -22,6 +22,11 @@ Daftar fitur per role yang sudah bisa dijalankan
         - [x] Ubah ketersediaan menu
         - [x] Hapus menu
         - [x] Buat menu baru
+    - Profile
+        - [x] Lihat profile franchise
+        - [x] Ubah profile: nama, alamat
+    - Order
+        - [x] Lihat daftar pesanan
 3. Superadmin
     - Auth
         - [x] Login

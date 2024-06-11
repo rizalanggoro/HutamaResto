@@ -12,4 +12,8 @@ class Franchise extends Model {
     public function menus(): HasMany {
         return $this->hasMany(Menu::class, 'id_franchise');
     }
+
+    public function orders(): HasMany {
+        return $this->hasMany(Order::class, 'id_franchise');
+    }
 }
