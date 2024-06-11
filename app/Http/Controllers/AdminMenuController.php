@@ -13,7 +13,7 @@ class AdminMenuController extends Controller {
         $menus = $franchise->menus()->get();
 
         return Inertia::render('Admin/Dashboard/Menu/Index', [
-            'franchise' => $franchise,
+            'Franchise' => $franchise,
             'menus' => $menus,
         ]);
     }

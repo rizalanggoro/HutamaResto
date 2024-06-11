@@ -1,11 +1,11 @@
-import { cn } from "@/lib/utils";
-import { HTMLAttributes, PropsWithChildren } from "react";
+import {cn} from "@/lib/utils";
+import {HTMLAttributes, PropsWithChildren} from "react";
 
-export default function Container({
-    className,
-    children,
-    variant = "md",
-}: PropsWithChildren<{
+export default function ContainerComponent({
+                                               className,
+                                               children,
+                                               variant = "md",
+                                           }: PropsWithChildren<{
     variant?: "xs" | "sm" | "md" | "lg" | "xl";
 }> &
     HTMLAttributes<HTMLDivElement>) {

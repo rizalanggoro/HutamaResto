@@ -2,8 +2,8 @@
 // import { Link } from '@inertiajs/react';
 // import { PropsWithChildren } from 'react';
 
-import Navbar from "@/Components/Navbar";
-import { PropsWithChildren } from "react";
+import NavbarComponent from "@/Components/Navbar";
+import {PropsWithChildren} from "react";
 
 // export default function Guest({ children }: PropsWithChildren) {
 //     return (
@@ -24,7 +24,7 @@ import { PropsWithChildren } from "react";
 export default function GuestLayout(props: PropsWithChildren) {
     return (
         <>
-            <Navbar />
+            <NavbarComponent/>
 
             <main>{props.children}</main>
         </>

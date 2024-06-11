@@ -1,9 +1,11 @@
-import { cn } from "@/lib/utils";
-import { PropsWithChildren } from "react";
+import {cn} from "@/lib/utils";
+import {PropsWithChildren} from "react";
+import {Link} from "@inertiajs/react";
+import {Button} from "@/Components/ui/button";
 
-export default function Navbar({
-    variant = "lg",
-}: PropsWithChildren<{
+export default function NavbarComponent({
+                                            variant = "lg",
+                                        }: PropsWithChildren<{
     variant?: "xs" | "sm" | "md" | "lg" | "xl";
 }>) {
     const maxW = {
@@ -23,7 +25,9 @@ export default function Navbar({
                         maxW[variant]
                     )}
                 >
-                    <p className="font-semibold">HutamaResto</p>
+                    <Button variant={'link'} className="font-semibold">
+                        <Link href={route('home')}>HutamaResto</Link>
+                    </Button>
                 </nav>
             </header>
         </>

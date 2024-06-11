@@ -1,18 +1,18 @@
-import Container from "@/Components/Container";
-import Navbar from "@/Components/Navbar";
-import { Button } from "@/Components/ui/button";
-import { Input } from "@/Components/ui/input";
-import { Label } from "@/Components/ui/label";
-import { Link, useForm } from "@inertiajs/react";
-import { Loader2 } from "lucide-react";
-import { FormEventHandler } from "react";
+import ContainerComponent from "@/Components/Container";
+import NavbarComponent from "@/Components/Navbar";
+import {Button} from "@/Components/ui/button";
+import {Input} from "@/Components/ui/input";
+import {Label} from "@/Components/ui/label";
+import {Link, useForm} from "@inertiajs/react";
+import {Loader2} from "lucide-react";
+import {FormEventHandler} from "react";
 
 type Props = {
     role: number;
 };
 
 export default function Login(props: Props) {
-    const { data, setData, errors, post, processing } = useForm({
+    const {data, setData, errors, post, processing} = useForm({
         email: "customer@example.com",
         password: "password",
         role: props.role,
@@ -34,8 +34,8 @@ export default function Login(props: Props) {
 
     return (
         <>
-            <Navbar />
-            <Container variant="xs" className="pt-24 pb-8">
+            <NavbarComponent/>
+            <ContainerComponent variant="xs" className="pt-24 pb-8">
                 <h3 className="text-2xl font-semibold">
                     Selamat datang kembali di HutamaResto
                 </h3>
@@ -90,7 +90,7 @@ export default function Login(props: Props) {
                             disabled={processing}
                         >
                             {processing && (
-                                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                <Loader2 className="w-4 h-4 mr-2 animate-spin"/>
                             )}
                             Masuk
                         </Button>
@@ -107,7 +107,7 @@ export default function Login(props: Props) {
                         </Button>
                     )}
                 </div>
-            </Container>
+            </ContainerComponent>
         </>
     );
 }

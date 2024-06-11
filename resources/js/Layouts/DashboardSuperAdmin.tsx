@@ -4,7 +4,7 @@ import {Button} from "@/Components/ui/button";
 import {ScrollArea} from "@/Components/ui/scroll-area";
 import {Toaster} from "@/Components/ui/toaster";
 import {Link} from "@inertiajs/react";
-import {Home, Info, ListChecks, Percent, UtensilsCrossed} from "lucide-react";
+import {Home, ListChecks} from "lucide-react";
 import React from "react";
 
 type Props = {
@@ -18,32 +18,17 @@ const menus: {
 }[] = [
     {
         title: "Halaman utama",
-        route: "admin.dashboard",
+        route: "superadmin.dashboard",
         icon: <Home className="w-4 h-4 mr-4"/>,
     },
     {
-        title: "Daftar pesanan",
-        route: "admin.dashboard.order",
+        title: "Daftar waralaba",
+        route: "superadmin.dashboard.franchise",
         icon: <ListChecks className="w-4 h-4 mr-4"/>,
-    },
-    {
-        title: "Daftar menu",
-        route: "admin.dashboard.menu",
-        icon: <UtensilsCrossed className="w-4 h-4 mr-4"/>,
-    },
-    {
-        title: "Daftar promo",
-        route: "admin.dashboard.promo",
-        icon: <Percent className="w-4 h-4 mr-4"/>,
-    },
-    {
-        title: "Profil restoran",
-        route: "admin.dashboard.profile",
-        icon: <Info className="w-4 h-4 mr-4"/>,
     },
 ];
 
-export default function DashboardAdminLayout({children}: Props) {
+export default function DashboardSuperAdminLayout({children}: Props) {
     return (
         <>
             <NavbarComponent variant="xl"/>

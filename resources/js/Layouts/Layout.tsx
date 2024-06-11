@@ -1,15 +1,15 @@
-import Navbar from "@/Components/Navbar";
-import { cn } from "@/lib/utils";
+import NavbarComponent from "@/Components/Navbar";
+import {cn} from "@/lib/utils";
 
 type Props = {
     children: React.ReactNode;
     variant?: "sm" | "md" | "lg" | "xl";
 };
 
-export default function Layout({ children, variant = "lg" }: Props) {
+export default function Layout({children, variant = "lg"}: Props) {
     return (
         <>
-            <Navbar />
+            <NavbarComponent/>
 
             <main
                 className={cn(

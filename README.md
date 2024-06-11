@@ -31,3 +31,6 @@ Daftar fitur per role yang sudah bisa dijalankan
     - Auth
         - [x] Login
         - [x] Logout
+    - Franchise
+        - [x] Lihat daftar franchise
+        - [ ] Tambah franchise

@@ -13,7 +13,7 @@
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -22,6 +22,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Menu> $menus
  * @property-read int|null $menus_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Order> $orders
+ * @property-read int|null $orders_count
  * @method static \Illuminate\Database\Eloquent\Builder|Franchise newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Franchise newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Franchise query()
@@ -36,7 +38,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $id_franchise
@@ -63,7 +65,56 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
+ *
+ * @property int $id
+ * @property int $id_user
+ * @property int $id_franchise
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Franchise $Franchise
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OrderItem> $orderItems
+ * @property-read int|null $order_items_count
+ * @property-read \App\Models\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|Order newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereIdFranchise($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereIdUser($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereUpdatedAt($value)
+ */
+	class Order extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ *
+ *
+ * @property int $id
+ * @property int $id_order
+ * @property int $id_menu
+ * @property int $count
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Menu $menu
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem query()
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereIdMenu($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereIdOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereUpdatedAt($value)
+ */
+	class OrderItem extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ *
  *
  * @property int $id
  * @property string $name
@@ -78,7 +129,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -89,10 +140,12 @@ namespace App\Models{
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Franchise> $franchise
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Franchise> $Franchise
  * @property-read int|null $franchise_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Order> $orders
+ * @property-read int|null $orders_count
  * @property-read \App\Models\Role|null $role
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()

@@ -12,7 +12,7 @@ class AdminProfileController extends Controller {
         $franchise = Auth::user()->franchise()->first();
 
         return Inertia::render('Admin/Dashboard/Profile/Index', [
-            'franchise' => $franchise,
+            'Franchise' => $franchise,
         ]);
     }
 

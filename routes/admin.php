@@ -7,7 +7,7 @@ use App\Http\Controllers\AdminProfileController;
 use App\Http\Middleware\AdminAuthMiddleware;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware([AdminAuthMiddleware::class])->prefix('admin')->group(function () {
+Route::middleware(AdminAuthMiddleware::class)->prefix('admin')->group(function () {
     Route::prefix('dashboard')->group(function () {
         // dashboard
         Route::get('/', [AdminDashboardController::class, 'show'])->name('admin.dashboard');

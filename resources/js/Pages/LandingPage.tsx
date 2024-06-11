@@ -1,13 +1,8 @@
-import Container from "@/Components/Container";
-import Navbar from "@/Components/Navbar";
-import { Button } from "@/Components/ui/button";
-import {
-    Card,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/Components/ui/card";
-import { Link } from "@inertiajs/react";
+import ContainerComponent from "@/Components/Container";
+import NavbarComponent from "@/Components/Navbar";
+import {Button} from "@/Components/ui/button";
+import {Card, CardDescription, CardHeader, CardTitle,} from "@/Components/ui/card";
+import {Link} from "@inertiajs/react";
 
 type Props = {
     franchises: {
@@ -19,9 +14,9 @@ type Props = {
 export default function LandingPage(props: Props) {
     return (
         <>
-            <Navbar />
+            <NavbarComponent/>
 
-            <Container>
+            <ContainerComponent>
                 <p>
                     Lorem ipsum dolor sit amet consectetur, adipisicing elit.
                     Minima porro hic fugiat dolores, velit, at ducimus totam
@@ -43,7 +38,7 @@ export default function LandingPage(props: Props) {
                     </Link>
                 </Button>
 
-                <br />
+                <br/>
 
                 <Button asChild variant={"link"}>
                     <Link href={route("dashboard")}>Dashboard customer</Link>
@@ -71,7 +66,7 @@ export default function LandingPage(props: Props) {
                         </Card>
                     ))}
                 </div>
-            </Container>
+            </ContainerComponent>
         </>
     );
 }

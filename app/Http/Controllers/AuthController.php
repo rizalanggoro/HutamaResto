@@ -2,29 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class AuthController extends Controller {
-    public function showCustomerLogin() {
+    public function showCustomerLogin(): Response {
         return Inertia::render('Auth/V2/Login', [
             'role' => 0,
         ]);
     }
 
-    public function showCustomerRegister() {
+    public function showCustomerRegister(): Response {
         return Inertia::render('Auth/V2/Register');
     }
 
-    public function showAdminLogin() {
+    public function showAdminLogin(): Response {
         return Inertia::render('Auth/V2/Login', [
             'role' => 1,
         ]);
     }
 
-    public function showSuperAdminLogin() {
+    public function showSuperAdminLogin(): Response {
         return Inertia::render('Auth/V2/Login', [
             'role' => 2,
         ]);
@@ -53,7 +54,7 @@ class AuthController extends Controller {
                 1 => 'admin.dashboard',
                 2 => 'superadmin.dashboard',
             ];
-            $route  = $routes[$credentials['role']];
+            $route = $routes[$credentials['role']];
 
             return redirect()->intended(route($route));
         }
@@ -64,7 +65,7 @@ class AuthController extends Controller {
     public function register(Request $request) {
     }
 
-    public function logout(Request $request) {
+    public function logout(Request $request): RedirectResponse {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerate();

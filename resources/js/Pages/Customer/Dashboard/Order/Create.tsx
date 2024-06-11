@@ -1,26 +1,13 @@
 import BreadcrumbComponent from "@/Components/Breadcrumb";
-import { Button } from "@/Components/ui/button";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/Components/ui/select";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/Components/ui/table";
+import {Button} from "@/Components/ui/button";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from "@/Components/ui/select";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from "@/Components/ui/table";
 import DashboardCustomerLayout from "@/Layouts/DashboardCustomer";
-import { Franchise, Menu } from "@/types/models";
-import { router } from "@inertiajs/react";
+import {Franchise, Menu} from "@/types/models";
+import {router} from "@inertiajs/react";
 import axios from "axios";
-import { Minus, Plus } from "lucide-react";
-import { useEffect, useState } from "react";
+import {Minus, Plus} from "lucide-react";
+import {useEffect, useState} from "react";
 
 type Props = {
     franchises: Franchise[];
@@ -39,13 +26,14 @@ export default function Page(props: Props) {
             if (selectedIdFranchise) {
                 try {
                     const response = await axios.get(
-                        route("dashboard.order.create.franchise.menu", {
+                        route("dashboard.order.create.Franchise.menu", {
                             id_franchise: selectedIdFranchise,
                         })
                     );
-                    const { data } = response;
+                    const {data} = response;
                     setMenus(data.menus);
-                } catch (e) {}
+                } catch (e) {
+                }
             }
         };
 
@@ -56,7 +44,7 @@ export default function Page(props: Props) {
         setMenus(
             menus.map((it) => {
                 if (it.id === idMenu)
-                    return { ...it, count: (it.count ?? 0) + 1 };
+                    return {...it, count: (it.count ?? 0) + 1};
                 else return it;
             })
         );
@@ -65,7 +53,7 @@ export default function Page(props: Props) {
         setMenus(
             menus.map((it) => {
                 if (it.id === idMenu)
-                    return { ...it, count: (it.count ?? 0) - 1 };
+                    return {...it, count: (it.count ?? 0) - 1};
                 else return it;
             })
         );
@@ -86,7 +74,8 @@ export default function Page(props: Props) {
                         }),
                 })
                 .then((e) => router.visit(route("dashboard.order")));
-        } catch (e) {}
+        } catch (e) {
+        }
     };
 
     return (
@@ -95,8 +84,8 @@ export default function Page(props: Props) {
                 <div className="py-8 pr-2 relative">
                     <BreadcrumbComponent
                         items={[
-                            { title: "Halaman utama", href: "/dashboard" },
-                            { title: "Pesanan saya", href: "/dashboard/order" },
+                            {title: "Halaman utama", href: "/dashboard"},
+                            {title: "Pesanan saya", href: "/dashboard/order"},
                             {
                                 title: "Pesanan baru",
                                 href: "/dashboard/order/create",
@@ -113,12 +102,12 @@ export default function Page(props: Props) {
 
                     <Select onValueChange={(e) => setSelectedIdFranchise(e)}>
                         <SelectTrigger>
-                            <SelectValue placeholder="Pilih lokasi" />
+                            <SelectValue placeholder="Pilih lokasi"/>
                         </SelectTrigger>
                         <SelectContent>
                             {props.franchises.map((franchise, index) => (
                                 <SelectItem
-                                    key={"franchise-select-item-" + index}
+                                    key={"Franchise-select-item-" + index}
                                     value={String(franchise.id)}
                                 >
                                     {franchise.name}
@@ -155,7 +144,7 @@ export default function Page(props: Props) {
                                                     )
                                                 }
                                             >
-                                                <Minus className="w-4 h-4" />
+                                                <Minus className="w-4 h-4"/>
                                             </Button>
                                             <Button
                                                 variant={"ghost"}
@@ -172,7 +161,7 @@ export default function Page(props: Props) {
                                                     )
                                                 }
                                             >
-                                                <Plus className="w-4 h-4" />
+                                                <Plus className="w-4 h-4"/>
                                             </Button>
                                         </TableCell>
                                     </TableRow>

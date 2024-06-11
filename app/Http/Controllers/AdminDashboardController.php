@@ -12,7 +12,7 @@ class AdminDashboardController extends Controller {
 
         return Inertia::render('Admin/Dashboard/Index', [
             'user' => $user,
-            'franchise' => $franchise,
+            'Franchise' => $franchise,
         ]);
     }
 }
