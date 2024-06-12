@@ -11,55 +11,55 @@ use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class CustomerOrderController extends Controller {
-    public function show() {
-        $user = Auth::user();
-        $orders = $user->orders()->with('Franchise')->get();
+  public function show() {
+    $user = Auth::user();
+    $orders = $user->orders()->with('franchise')->get();
 
-        return Inertia::render("Customer/Dashboard/Order/Index", [
-            'user' => $user,
-            'orders' => $orders,
-        ]);
-    }
+    return Inertia::render("Customer/Dashboard/Order/Index", [
+      'user' => $user,
+      'orders' => $orders,
+    ]);
+  }
 
-    public function showCreate() {
-        $franchises = Franchise::orderBy('name')->get();
-        return Inertia::render("Customer/Dashboard/Order/Create", [
-            'franchises' => $franchises,
-        ]);
-    }
+  public function showCreate() {
+    $franchises = Franchise::orderBy('name')->get();
+    return Inertia::render("Customer/Dashboard/Order/Create", [
+      'franchises' => $franchises,
+    ]);
+  }
 
-    public function showDetail($id_order) {
-        $order = Order::whereId($id_order)->with(['Franchise', 'orderItems', 'orderItems.menu'])->first();
+  public function showDetail($id_order) {
+    $order = Order::whereId($id_order)->with(['franchise', 'orderItems', 'orderItems.menu'])->first();
 
-        return Inertia::render('Customer/Dashboard/Order/Detail', [
-            'order' => $order,
-        ]);
-    }
+    return Inertia::render('Customer/Dashboard/Order/Detail', [
+      'order' => $order,
+    ]);
+  }
 
-    public function create(Request $request) {
-        DB::transaction(function () use ($request) {
-            $idUser = Auth::user()->id;
-            $orderItems = $request->order_items;
+  public function create(Request $request) {
+    DB::transaction(function () use ($request) {
+      $idUser = Auth::user()->id;
+      $orderItems = $request->order_items;
 
-            if ($order = Order::create([
-                'id_user' => $idUser,
-                'id_franchise' => $request->id_franchise,
-            ])) {
-                foreach ($orderItems as $orderItem) {
-                    OrderItem::create([
-                        'id_order' => $order->id,
-                        'id_menu' => $orderItem['id_menu'],
-                        'count' => $orderItem['count'],
-                    ]);
-                }
-            }
-        });
+      if ($order = Order::create([
+        'id_user' => $idUser,
+        'id_franchise' => $request->id_franchise,
+      ])) {
+        foreach ($orderItems as $orderItem) {
+          OrderItem::create([
+            'id_order' => $order->id,
+            'id_menu' => $orderItem['id_menu'],
+            'count' => $orderItem['count'],
+          ]);
+        }
+      }
+    });
 
-        return response(null, 200);
-    }
+    return response(null, 200);
+  }
 
-    public function getCreateFranchiseMenu($id_franchise) {
-        $menus = Franchise::whereId($id_franchise)->first()->menus()->get();
-        return ['menus' => $menus];
-    }
+  public function getCreateFranchiseMenu($id_franchise) {
+    $menus = Franchise::whereId($id_franchise)->first()->menus()->get();
+    return ['menus' => $menus];
+  }
 }
