@@ -9,10 +9,8 @@ return new class extends Migration {
    * Run the migrations.
    */
   public function up(): void {
-    Schema::create('roles', function (Blueprint $table) {
-      $table->unsignedInteger('id')->primary();
-      $table->string('name');
-      $table->timestamps();
+    Schema::table('users', function (Blueprint $table) {
+      $table->foreign('id_role')->references('id')->on('roles');
     });
   }
 
@@ -20,6 +18,6 @@ return new class extends Migration {
    * Reverse the migrations.
    */
   public function down(): void {
-    Schema::dropIfExists('roles');
+    //
   }
 };
