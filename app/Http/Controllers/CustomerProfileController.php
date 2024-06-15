@@ -8,11 +8,7 @@ use Inertia\Inertia;
 
 class CustomerProfileController extends Controller {
     public function show() {
-        $user = Auth::user();
-
-        return Inertia::render('Customer/Dashboard/Profile/Index', [
-            'user' => $user,
-        ]);
+        return Inertia::render('Customer/Dashboard/Profile/Index',);
     }
 
     public function update(Request $request) {

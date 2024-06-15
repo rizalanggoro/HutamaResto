@@ -19,6 +19,6 @@ Route::middleware([CustomerAuthMiddleware::class])->group(function () {
 
         // profile
         Route::get('profile', [CustomerProfileController::class, 'show'])->name('dashboard.profile');
-        Route::put('profile', [CustomerProfileController::class, 'update'])->name('dashboard.profile');
+        Route::put('profile', [CustomerProfileController::class, 'update']);
     });
 });

@@ -8,9 +8,6 @@ use Inertia\Inertia;
 
 class CustomerDashboardController extends Controller {
     public function show() {
-        $user = Auth::user();
-        return Inertia::render("Customer/Dashboard/Index", [
-            'user' => $user,
-        ]);
+        return Inertia::render("Customer/Dashboard/Index");
     }
 }
