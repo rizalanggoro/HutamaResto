@@ -42,7 +42,7 @@ export default function DashboardCustomerLayout({
       <NavbarComponent variant="xl" user={props.user} />
 
       <ContainerComponent variant="xl" className="h-screen grid grid-cols-12">
-        <div className="col-span-3 pt-16">
+        <div className="col-span-2 pt-16">
           <ScrollArea className="w-full h-[calc(100vh-4rem)]">
             <div className="flex flex-col gap-1 py-8 pr-4">
               {menus.map((menu, index) => (
@@ -61,7 +61,7 @@ export default function DashboardCustomerLayout({
             </div>
           </ScrollArea>
         </div>
-        <div className="col-span-9 pt-16">
+        <div className="col-span-10 pt-16">
           <ScrollArea className="w-full h-[calc(100vh-4rem)]">
             <div className="pl-4">{children}</div>
           </ScrollArea>

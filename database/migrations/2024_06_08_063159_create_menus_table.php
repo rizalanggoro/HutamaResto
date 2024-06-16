@@ -11,7 +11,7 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('menus', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_franchise');
+            $table->unsignedBigInteger('franchise_id');
             $table->string('name');
             $table->string('description');
             $table->boolean('availability');
@@ -20,7 +20,7 @@ return new class extends Migration {
         });
 
         Schema::table('menus', function (Blueprint $table) {
-            $table->foreign('id_franchise')->references('id')->on('franchises')->onDelete('cascade');
+            $table->foreign('franchise_id')->references('id')->on('franchises')->onDelete('cascade');
         });
     }
 

@@ -1,97 +1,156 @@
-import { useEffect, FormEventHandler } from 'react';
-import Checkbox from '@/Components/Checkbox';
-import GuestLayout from '@/Layouts/GuestLayout';
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import { Head, Link, useForm } from '@inertiajs/react';
+import ContainerComponent from "@/Components/Container";
+import NavbarComponent from "@/Components/Navbar";
+import { Button } from "@/Components/ui/button";
+import { Input } from "@/Components/ui/input";
+import { Label } from "@/Components/ui/label";
+import { Separator } from "@/Components/ui/separator";
+import { PageProps } from "@/types";
+import { Head, Link, useForm } from "@inertiajs/react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { FormEventHandler, useState } from "react";
 
-export default function Login({ status, canResetPassword }: { status?: string, canResetPassword: boolean }) {
-    const { data, setData, post, processing, errors, reset } = useForm({
-        email: '',
-        password: '',
-        remember: false,
-    });
+export default function Login(
+  props: PageProps<{
+    role: number;
+  }>
+) {
+  const { data, setData, errors, post, processing } = useForm({
+    email: "customer@example.com",
+    password: "password",
+    role: props.role,
+  });
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-    useEffect(() => {
-        return () => {
-            reset('password');
-        };
-    }, []);
+  const handleSubmit: FormEventHandler = (e) => {
+    e.preventDefault();
 
-    const submit: FormEventHandler = (e) => {
-        e.preventDefault();
-
-        post(route('login'));
+    const routes: {
+      [key: number]: string;
+    } = {
+      0: "login",
+      1: "admin.login",
+      2: "superadmin.login",
     };
 
-    return (
-        <GuestLayout>
-            <Head title="Log in" />
+    post(route(routes[props.role]));
+  };
 
-            {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
+  return (
+    <>
+      <Head title="Masuk" />
 
-            <form onSubmit={submit}>
-                <div>
-                    <InputLabel htmlFor="email" value="Email" />
+      <NavbarComponent />
+      <ContainerComponent variant="xs" className="pt-24 pb-8">
+        <h3 className="text-2xl font-semibold">
+          Selamat datang kembali di{" "}
+          <span className="text-transparent bg-gradient-to-tr from-primary to-teal-600 bg-clip-text">
+            HutamaResto
+          </span>
+        </h3>
+        <p className="mt-2 text-muted-foreground">
+          Silahkan masukkan beberapa informasi berikut untuk melanjutkan ke
+          aplikasi HutamaResto
+        </p>
 
-                    <TextInput
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        className="mt-1 block w-full"
-                        autoComplete="username"
-                        isFocused={true}
-                        onChange={(e) => setData('email', e.target.value)}
-                    />
+        <form onSubmit={handleSubmit} className="mt-8">
+          <div className="space-y-2">
+            <div className="space-y-1">
+              <Label>Masukkan alamat email</Label>
+              <Input
+                value={data.email}
+                onChange={(e) =>
+                  setData({
+                    ...data,
+                    email: e.target.value,
+                  })
+                }
+              />
+              {errors.email && (
+                <p className="text-sm text-destructive">{errors.email}</p>
+              )}
+            </div>
 
-                    <InputError message={errors.email} className="mt-2" />
-                </div>
+            <div className="space-y-1">
+              <Label>Masukkan kata sandi</Label>
+              <div className="flex items-center gap-1">
+                <Input
+                  type={isPasswordVisible ? "text" : "password"}
+                  className="flex-1"
+                  value={data.password}
+                  onChange={(e) =>
+                    setData({
+                      ...data,
+                      password: e.target.value,
+                    })
+                  }
+                />
+                <Button
+                  type="button"
+                  size={"icon"}
+                  variant={"secondary"}
+                  onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+                >
+                  {isPasswordVisible ? (
+                    <EyeOff className="w-4 h-4" />
+                  ) : (
+                    <Eye className="w-4 h-4" />
+                  )}
+                </Button>
+              </div>
+              {errors.password && (
+                <p className="text-sm text-destructive">{errors.password}</p>
+              )}
+            </div>
+          </div>
 
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
+          <div className="flex justify-end mt-4">
+            <Button type="submit" className="w-full" disabled={processing}>
+              {processing && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+              {
+                ["Masuk", "Masuk sebagai admin", "Masuk sebagai superadmin"][
+                  props.role
+                ]
+              }
+            </Button>
+          </div>
+        </form>
 
-                    <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        autoComplete="current-password"
-                        onChange={(e) => setData('password', e.target.value)}
-                    />
+        {props.role === 0 && (
+          <p className="text-muted-foreground mt-4 text-center text-sm">
+            Akun Anda tidak terdaftar sebagai customer? Daftarkan sebuah akun
+            melalui link{" "}
+            <Link
+              className="underline-offset-4 hover:underline text-primary"
+              href={route("register")}
+            >
+              berikut
+            </Link>
+          </p>
+        )}
 
-                    <InputError message={errors.password} className="mt-2" />
-                </div>
+        <div className="flex items-center gap-4 my-8">
+          <Separator className="flex-1" />
+          <p className="text-sm text-muted-foreground">atau</p>
+          <Separator className="flex-1" />
+        </div>
 
-                <div className="block mt-4">
-                    <label className="flex items-center">
-                        <Checkbox
-                            name="remember"
-                            checked={data.remember}
-                            onChange={(e) => setData('remember', e.target.checked)}
-                        />
-                        <span className="ms-2 text-sm text-gray-600">Remember me</span>
-                    </label>
-                </div>
-
-                <div className="flex items-center justify-end mt-4">
-                    {canResetPassword && (
-                        <Link
-                            href={route('password.request')}
-                            className="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        >
-                            Forgot your password?
-                        </Link>
-                    )}
-
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Log in
-                    </PrimaryButton>
-                </div>
-            </form>
-        </GuestLayout>
-    );
+        <div className="flex flex-col gap-1">
+          <Button className="w-full" variant={"outline"} asChild>
+            <Link
+              href={props.role === 1 ? route("login") : route("admin.login")}
+            >
+              Masuk sebagai {props.role === 1 ? "customer" : "admin"}
+            </Link>
+          </Button>
+          {props.role === 1 && (
+            <Button className="w-full" variant={"outline"} asChild>
+              <Link href={route("superadmin.login")}>
+                Masuk sebagai superadmin
+              </Link>
+            </Button>
+          )}
+        </div>
+      </ContainerComponent>
+    </>
+  );
 }

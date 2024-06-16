@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class OrderItem extends Model {
     use HasFactory;
-    protected $fillable = ['id_order', 'id_menu', 'count'];
+    protected $fillable = ['order_id', 'menu_id', 'count'];
 
     public function menu(): BelongsTo {
-        return $this->belongsTo(Menu::class, 'id_menu');
+        return $this->belongsTo(Menu::class, 'menu_id');
     }
 }

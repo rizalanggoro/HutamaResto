@@ -10,14 +10,14 @@ return new class extends Migration {
      */
     public function up(): void {
         Schema::create("admin_franchise", function (Blueprint $table) {
-            $table->unsignedBigInteger('id_admin');
-            $table->unsignedBigInteger('id_franchise');
-            $table->primary(['id_admin', 'id_franchise']);
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('franchise_id');
+            $table->primary(['user_id', 'franchise_id']);
         });
 
         Schema::table('admin_franchise', function (Blueprint $table) {
-            $table->foreign('id_admin')->references('id')->on('users');
-            $table->foreign('id_franchise')->references('id')->on('franchises');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('franchise_id')->references('id')->on('franchises');
         });
     }
 

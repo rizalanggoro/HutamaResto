@@ -14,12 +14,12 @@ class AdminFranchisesSeeder extends Seeder {
      */
     public function run(): void {
         $franchises = Franchise::all();
-        $admins = User::whereIdRole(1)->get();
+        $users = User::whereRole('admin')->get();
 
         foreach ($franchises as $index => $franchise) {
             DB::table('admin_franchise')->insert([
-                'id_admin' => $admins[$index]->id,
-                'id_franchise' => $franchise->id,
+                'user_id' => $users[$index]->id,
+                'franchise_id' => $franchise->id,
             ]);
         }
     }

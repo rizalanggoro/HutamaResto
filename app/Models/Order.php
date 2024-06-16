@@ -12,19 +12,19 @@ class Order extends Model {
 
     protected $table = 'orders';
     protected $fillable = [
-        'id_user',
-        'id_franchise',
+        'user_id',
+        'franchise_id',
     ];
 
     public function franchise(): BelongsTo {
-        return $this->belongsTo(Franchise::class, 'id_franchise');
+        return $this->belongsTo(Franchise::class, 'franchise_id');
     }
 
     public function orderItems(): HasMany {
-        return $this->hasMany(OrderItem::class, 'id_order');
+        return $this->hasMany(OrderItem::class, 'order_id');
     }
 
     public function user(): BelongsTo {
-        return $this->belongsTo(User::class, 'id_user');
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

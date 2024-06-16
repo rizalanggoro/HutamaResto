@@ -10,10 +10,10 @@ class Franchise extends Model {
     use HasFactory;
 
     public function menus(): HasMany {
-        return $this->hasMany(Menu::class, 'id_franchise');
+        return $this->hasMany(Menu::class, 'franchise_id');
     }
 
     public function orders(): HasMany {
-        return $this->hasMany(Order::class, 'id_franchise');
+        return $this->hasMany(Order::class, 'franchise_id');
     }
 }

@@ -11,14 +11,15 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_user');
-            $table->unsignedBigInteger('id_franchise');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('franchise_id');
+            $table->enum('status', ['waiting_payment', 'processing', 'delivering', 'done'])->default('waiting_payment');
             $table->timestamps();
         });
 
         Schema::table('orders', function (Blueprint $table) {
-            $table->foreign('id_user')->references('id')->on('users')->cascadeOnDelete();
-            $table->foreign('id_franchise')->references('id')->on('franchises')->cascadeOnDelete();
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreign('franchise_id')->references('id')->on('franchises')->cascadeOnDelete();
         });
     }
 

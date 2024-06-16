@@ -1,9 +1,6 @@
 <?php
 
-use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CustomerLoginController;
-use App\Http\Controllers\CustomerRegisterController;
 use App\Http\Controllers\LandingPageController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,12 +11,12 @@ Route::get('/', [LandingPageController::class, 'show'])->name('home');
 Route::get('login', [AuthController::class, 'showCustomerLogin'])->name('login');
 Route::post('login', [AuthController::class, 'login'])->name('login');
 Route::prefix('admin')->group(function () {
-    Route::get('login', [AuthController::class, 'showAdminLogin'])->name('admin.login');
-    Route::post('login', [AuthController::class, 'login'])->name('admin.login');
+  Route::get('login', [AuthController::class, 'showAdminLogin'])->name('admin.login');
+  Route::post('login', [AuthController::class, 'login'])->name('admin.login');
 });
 Route::prefix('superadmin')->group(function () {
-    Route::get('login', [AuthController::class, 'showSuperAdminLogin'])->name('superadmin.login');
-    Route::post('login', [AuthController::class, 'login'])->name('superadmin.login');
+  Route::get('login', [AuthController::class, 'showSuperAdminLogin'])->name('superadmin.login');
+  Route::post('login', [AuthController::class, 'login'])->name('superadmin.login');
 });
 Route::get('register', [AuthController::class, 'showCustomerRegister'])->name('register');
 Route::post('register', [AuthController::class, 'register'])->name('register');

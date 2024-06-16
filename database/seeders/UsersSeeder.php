@@ -13,21 +13,20 @@ class UsersSeeder extends Seeder {
         User::factory()->create([
             'name' => 'Customer User',
             'email' => 'customer@example.com',
-            'id_role' => 0,
         ]);
 
         for ($a = 0; $a < 5; $a++) {
             User::factory()->create([
                 'name' => 'Admin ' . ($a + 1) . ' User',
                 'email' => 'admin' . ($a + 1) . '@example.com',
-                'id_role' => 1,
+                'role' => 'admin',
             ]);
         }
 
         User::factory()->create([
             'name' => 'Superadmin User',
             'email' => 'superadmin@example.com',
-            'id_role' => 2,
+            'role' => 'superadmin',
         ]);
     }
 }

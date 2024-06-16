@@ -35,16 +35,12 @@ class User extends Authenticatable {
         'remember_token',
     ];
 
-    public function role(): HasOne {
-        return $this->hasOne(Role::class, 'id', 'id_role');
-    }
-
     public function franchise(): BelongsToMany {
-        return $this->belongsToMany(Franchise::class, 'admin_franchise', 'id_admin', 'id_franchise');
+        return $this->belongsToMany(Franchise::class, 'admin_franchise', 'user_id', 'franchise_id');
     }
 
     public function orders(): HasMany {
-        return $this->hasMany(Order::class, 'id_user', 'id');
+        return $this->hasMany(Order::class, 'user_id', 'id');
     }
 
     /**

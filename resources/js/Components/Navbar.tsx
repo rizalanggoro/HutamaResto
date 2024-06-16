@@ -51,17 +51,19 @@ export default function NavbarComponent({
             <Link href={route("home")}>HutamaResto</Link>
           </Button>
 
-          <div>
-            {menus.map((menu, index) => (
-              <Button
-                key={"menu-item-" + index}
-                variant={"link"}
-                className="text-muted-foreground"
-              >
-                {menu.title}
-              </Button>
-            ))}
-          </div>
+          {route().current()?.indexOf("dashboard") === -1 && (
+            <div>
+              {menus.map((menu, index) => (
+                <Button
+                  key={"menu-item-" + index}
+                  variant={"link"}
+                  className="text-muted-foreground"
+                >
+                  {menu.title}
+                </Button>
+              ))}
+            </div>
+          )}
 
           <div className="flex items-center gap-2">
             <Button

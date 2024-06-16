@@ -11,15 +11,15 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('order_items', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_order');
-            $table->unsignedBigInteger('id_menu');
+            $table->unsignedBigInteger('order_id');
+            $table->unsignedBigInteger('menu_id');
             $table->unsignedInteger('count');
             $table->timestamps();
         });
 
         Schema::table('order_items', function (Blueprint $table) {
-            $table->foreign('id_order')->references('id')->on('orders')->cascadeOnDelete();
-            $table->foreign('id_menu')->references('id')->on('menus');
+            $table->foreign('order_id')->references('id')->on('orders')->cascadeOnDelete();
+            $table->foreign('menu_id')->references('id')->on('menus');
         });
     }
 

@@ -13,9 +13,9 @@ Route::middleware([CustomerAuthMiddleware::class])->group(function () {
         // order
         Route::get('order', [CustomerOrderController::class, 'show'])->name('dashboard.order');
         Route::get('order/detail/{id_order}', [CustomerOrderController::class, 'showDetail'])->name('dashboard.order.detail');
-        Route::get('order/create', [CustomerOrderController::class, 'showCreate'])->name('dashboard.order.create');
+        Route::get('order/create/choose-restaurant', [CustomerOrderController::class, 'showChooseRestaurant'])->name('dashboard.order.create.chooseRestaurant');
+        Route::get('order/create/{franchiseId}/choose-menu', [CustomerOrderController::class, 'showChooseMenu'])->name('dashboard.order.create.chooseMenu');
         Route::post('order/create', [CustomerOrderController::class, 'create'])->name('dashboard.order.create');
-        Route::get('order/create/{id_franchise}/menu', [CustomerOrderController::class, 'getCreateFranchiseMenu'])->name('dashboard.order.create.Franchise.menu');
 
         // profile
         Route::get('profile', [CustomerProfileController::class, 'show'])->name('dashboard.profile');

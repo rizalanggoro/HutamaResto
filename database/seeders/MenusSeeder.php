@@ -16,7 +16,7 @@ class MenusSeeder extends Seeder {
         foreach ($franchises as $franchise) {
             for ($food = 0; $food < 8; $food++) {
                 Menu::create([
-                    'id_franchise' => $franchise->id,
+                    'franchise_id' => $franchise->id,
                     'name' => 'Makanan ke-' . $food,
                     'description' => 'Deskripsi untuk makanan ke-' . $food,
                     'availability' => true,
@@ -26,7 +26,7 @@ class MenusSeeder extends Seeder {
 
             for ($beverage = 0; $beverage < 5; $beverage++) {
                 Menu::create([
-                    'id_franchise' => $franchise->id,
+                    'franchise_id' => $franchise->id,
                     'name' => 'Minuman ke-' . $beverage,
                     'description' => 'Deskripsi untuk minuman ke-' . $beverage,
                     'availability' => true,

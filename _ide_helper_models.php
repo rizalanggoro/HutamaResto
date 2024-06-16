@@ -13,7 +13,7 @@
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $name
@@ -38,10 +38,10 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
- * @property int $id_franchise
+ * @property int $franchise_id
  * @property string $name
  * @property string $description
  * @property int $availability
@@ -54,8 +54,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Menu whereAvailability($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Menu whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Menu whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Menu whereFranchiseId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Menu whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Menu whereIdFranchise($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Menu whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Menu whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Menu whereUpdatedAt($value)
@@ -65,14 +65,15 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
- * @property int $id_user
- * @property int $id_franchise
+ * @property int $user_id
+ * @property int $franchise_id
+ * @property string $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Franchise $Franchise
+ * @property-read \App\Models\Franchise $franchise
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OrderItem> $orderItems
  * @property-read int|null $order_items_count
  * @property-read \App\Models\User $user
@@ -80,21 +81,22 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Order newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Order query()
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereFranchiseId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereIdFranchise($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereIdUser($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereUserId($value)
  */
 	class Order extends \Eloquent {}
 }
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
- * @property int $id_order
- * @property int $id_menu
+ * @property int $order_id
+ * @property int $menu_id
  * @property int $count
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -105,8 +107,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereCount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereIdMenu($value)
- * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereIdOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereMenuId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereOrderId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereUpdatedAt($value)
  */
 	class OrderItem extends \Eloquent {}
@@ -114,22 +116,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
- *
- * @property int $id
- * @property string $name
- * @method static \Illuminate\Database\Eloquent\Builder|Role newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Role newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Role query()
- * @method static \Illuminate\Database\Eloquent\Builder|Role whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Role whereName($value)
- */
-	class Role extends \Eloquent {}
-}
-
-namespace App\Models{
-/**
- *
+ * 
  *
  * @property int $id
  * @property string $name
@@ -140,13 +127,13 @@ namespace App\Models{
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Franchise> $Franchise
+ * @property string $role
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Franchise> $franchise
  * @property-read int|null $franchise_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Order> $orders
  * @property-read int|null $orders_count
- * @property-read \App\Models\Role|null $role
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
@@ -159,6 +146,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereRole($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  */
 	class User extends \Eloquent {}
