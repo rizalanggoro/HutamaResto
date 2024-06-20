@@ -11,7 +11,7 @@ import { FormEventHandler, useState } from "react";
 
 export default function Login(
   props: PageProps<{
-    role: number;
+    role: "customer" | "admin" | "superadmin" | string;
   }>
 ) {
   const { data, setData, errors, post, processing } = useForm({
@@ -25,11 +25,11 @@ export default function Login(
     e.preventDefault();
 
     const routes: {
-      [key: number]: string;
+      [key: string]: string;
     } = {
-      0: "login",
-      1: "admin.login",
-      2: "superadmin.login",
+      customer: "login",
+      admin: "admin.login",
+      superadmin: "superadmin.login",
     };
 
     post(route(routes[props.role]));
@@ -41,6 +41,7 @@ export default function Login(
 
       <NavbarComponent />
       <ContainerComponent variant="xs" className="pt-24 pb-8">
+        <p>{props.role}</p>
         <h3 className="text-2xl font-semibold">
           Selamat datang kembali di{" "}
           <span className="text-transparent bg-gradient-to-tr from-primary to-teal-600 bg-clip-text">
@@ -107,15 +108,17 @@ export default function Login(
             <Button type="submit" className="w-full" disabled={processing}>
               {processing && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
               {
-                ["Masuk", "Masuk sebagai admin", "Masuk sebagai superadmin"][
-                  props.role
-                ]
+                {
+                  customer: "Masuk",
+                  admin: "Masuk sebagai admin",
+                  superadmin: "Masuk sebagai superadmin",
+                }[props.role]
               }
             </Button>
           </div>
         </form>
 
-        {props.role === 0 && (
+        {props.role === "customer" && (
           <p className="text-muted-foreground mt-4 text-center text-sm">
             Akun Anda tidak terdaftar sebagai customer? Daftarkan sebuah akun
             melalui link{" "}
@@ -137,12 +140,14 @@ export default function Login(
         <div className="flex flex-col gap-1">
           <Button className="w-full" variant={"outline"} asChild>
             <Link
-              href={props.role === 1 ? route("login") : route("admin.login")}
+              href={
+                props.role === "admin" ? route("login") : route("admin.login")
+              }
             >
-              Masuk sebagai {props.role === 1 ? "customer" : "admin"}
+              Masuk sebagai {props.role === "admin" ? "customer" : "admin"}
             </Link>
           </Button>
-          {props.role === 1 && (
+          {props.role === "admin" && (
             <Button className="w-full" variant={"outline"} asChild>
               <Link href={route("superadmin.login")}>
                 Masuk sebagai superadmin

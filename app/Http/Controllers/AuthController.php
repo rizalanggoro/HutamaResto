@@ -11,7 +11,7 @@ use Inertia\Response;
 class AuthController extends Controller {
   public function showCustomerLogin(): Response {
     return Inertia::render('Auth/Login', [
-      'role' => 0,
+      'role' => 'customer',
     ]);
   }
 
@@ -21,13 +21,13 @@ class AuthController extends Controller {
 
   public function showAdminLogin(): Response {
     return Inertia::render('Auth/Login', [
-      'role' => 1,
+      'role' => 'admin',
     ]);
   }
 
   public function showSuperAdminLogin(): Response {
     return Inertia::render('Auth/Login', [
-      'role' => 2,
+      'role' => 'superadmin',
     ]);
   }
 
@@ -35,7 +35,7 @@ class AuthController extends Controller {
     $credentials = $request->validate([
       'email' => ['email', 'string', 'required'],
       'password' => ['string', 'required'],
-      'role' => ['numeric', 'required'],
+      'role' => ['string', 'required'],
     ], [
       'email.email' => 'Alamat email tidak valid!',
       'email.required' => 'Alamat email tidak boleh kosong!',
@@ -46,13 +46,13 @@ class AuthController extends Controller {
     if (Auth::attempt([
       'email' => $credentials['email'],
       'password' => $credentials['password'],
-      'id_role' => $credentials['role'],
+      'role' => $credentials['role'],
     ])) {
       $request->session()->regenerate();
       $routes = [
-        0 => 'dashboard',
-        1 => 'admin.dashboard',
-        2 => 'superadmin.dashboard',
+        'customer' => 'dashboard',
+        'admin' => 'admin.dashboard',
+        'superadmin' => 'superadmin.dashboard',
       ];
       $route = $routes[$credentials['role']];
 

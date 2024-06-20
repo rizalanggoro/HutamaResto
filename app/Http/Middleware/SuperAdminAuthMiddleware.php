@@ -15,8 +15,8 @@ class SuperAdminAuthMiddleware {
      */
     public function handle(Request $request, Closure $next): Response {
         if (Auth::check()) {
-            $role = Auth::user()->id_role;
-            if ($role === 2) return $next($request);
+            $role = Auth::user()->role;
+            if ($role === 'superadmin') return $next($request);
         }
 
         return redirect()->intended(route('superadmin.login'));

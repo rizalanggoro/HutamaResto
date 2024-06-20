@@ -15,8 +15,8 @@ class CustomerAuthMiddleware {
      */
     public function handle(Request $request, Closure $next): Response {
         if (Auth::check()) {
-            $role = Auth::user()->id_role;
-            if ($role === 0) return $next($request);
+            $role = Auth::user()->role;
+            if ($role === 'customer') return $next($request);
         }
 
         return redirect()->intended(route('login'));
