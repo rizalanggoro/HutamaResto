@@ -2,6 +2,16 @@ import BreadcrumbComponent from "@/Components/Breadcrumb";
 import { Badge } from "@/Components/ui/badge";
 import { Button } from "@/Components/ui/button";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/Components/ui/dialog";
+import { Input } from "@/Components/ui/input";
+import { Label } from "@/Components/ui/label";
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -25,8 +35,9 @@ import DashboardCustomerLayout from "@/Layouts/DashboardCustomer";
 import { orderStatuses } from "@/lib/order-status";
 import { PageProps } from "@/types";
 import { Franchise, Order } from "@/types/models";
-import { Head, Link } from "@inertiajs/react";
-import { Eye, PenLine, Trash2, Upload } from "lucide-react";
+import { Head, Link, router, useForm } from "@inertiajs/react";
+import { Eye, Loader2, PenLine, Trash2, Upload } from "lucide-react";
+import { useState } from "react";
 
 export default function Page(
   props: PageProps<{
@@ -35,6 +46,30 @@ export default function Page(
     })[];
   }>
 ) {
+  const { data, setData, post, processing } = useForm({
+    orderId: -1,
+    receipt: null as File | null,
+  });
+
+  const [selectedOrder, setSelectedOrder] = useState<
+    (Order & { franchise: Franchise }) | undefined
+  >();
+  const [isDialogUploadReceiptOpen, setIsDialogUploadReceiptOpen] =
+    useState(false);
+
+  const onClickButtonUploadReceipt = () => {
+    if (data.orderId !== -1 && data.receipt) {
+      post(route("dashboard.payment.uploadReceipt"), {
+        onSuccess: () => {
+          router.reload();
+          setSelectedOrder(undefined);
+          setIsDialogUploadReceiptOpen(false);
+          setData({ orderId: -1, receipt: null });
+        },
+      });
+    }
+  };
+
   return (
     <>
       <Head>
@@ -126,8 +161,16 @@ export default function Page(
 
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Button variant={"outline"} size={"icon"}>
-                          <Upload className="w4 h-4" />
+                        <Button
+                          variant={"outline"}
+                          size={"icon"}
+                          onClick={() => {
+                            setIsDialogUploadReceiptOpen(true);
+                            setSelectedOrder(order);
+                            setData({ ...data, orderId: order.id });
+                          }}
+                        >
+                          <Upload className="w-4 h-4" />
                         </Button>
                       </TooltipTrigger>
                       <TooltipContent>
@@ -154,6 +197,58 @@ export default function Page(
           </Table>
         </div>
       </DashboardCustomerLayout>
+
+      {/* dialog upload receipt */}
+      <Dialog
+        open={isDialogUploadReceiptOpen}
+        onOpenChange={(e) => {
+          if (!processing) setIsDialogUploadReceiptOpen(e);
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Unggah Bukti Pembayaran</DialogTitle>
+            <DialogDescription>
+              Unggah bukti pembayaran untuk{" "}
+              <span className="font-semibold">
+                {selectedOrder?.franchise.name ?? "-"}
+              </span>
+              . Bukti pembayaran dapat berupa screenshot transfer atau yang
+              lainnya
+            </DialogDescription>
+
+            <div className="space-y-1">
+              <Label htmlFor="receipt">Bukti pembayaran</Label>
+              <Input
+                id="receipt"
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const files = e.target.files;
+                  if (files) {
+                    const file = files[0];
+                    setData({ ...data, receipt: file });
+                  }
+                }}
+              />
+            </div>
+
+            <DialogFooter className="pt-4">
+              <Button
+                onClick={onClickButtonUploadReceipt}
+                disabled={processing}
+              >
+                {processing ? (
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                ) : (
+                  <Upload className="w-4 h-4 mr-2" />
+                )}
+                {processing ? "Mengunggah" : "Unggah"}
+              </Button>
+            </DialogFooter>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

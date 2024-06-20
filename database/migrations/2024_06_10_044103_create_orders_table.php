@@ -13,7 +13,8 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('franchise_id');
-            $table->enum('status', ['waiting_payment', 'processing', 'delivering', 'done'])->default('waiting_payment');
+            $table->enum('status', ['waiting_payment', 'waiting_payment_verification', 'processing', 'delivering', 'done'])->default('waiting_payment');
+            $table->string('receipt_path')->nullable();
             $table->timestamps();
         });
 

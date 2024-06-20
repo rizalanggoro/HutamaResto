@@ -4,7 +4,14 @@ import { Button } from "@/Components/ui/button";
 import { ScrollArea } from "@/Components/ui/scroll-area";
 import { Toaster } from "@/Components/ui/toaster";
 import { Link } from "@inertiajs/react";
-import { Home, Info, ListChecks, Percent, UtensilsCrossed } from "lucide-react";
+import {
+  CreditCard,
+  Home,
+  Info,
+  ListChecks,
+  Percent,
+  UtensilsCrossed,
+} from "lucide-react";
 import React from "react";
 
 type Props = {
@@ -20,6 +27,11 @@ const menus: {
     title: "Halaman utama",
     route: "admin.dashboard",
     icon: <Home className="w-4 h-4 mr-4" />,
+  },
+  {
+    title: "Verifikasi pembayaran",
+    route: "admin.dashboard.payment",
+    icon: <CreditCard className="w-4 h-4 mr-4" />,
   },
   {
     title: "Daftar pesanan",

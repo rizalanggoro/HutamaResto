@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CustomerDashboardController;
 use App\Http\Controllers\CustomerOrderController;
+use App\Http\Controllers\CustomerPaymentController;
 use App\Http\Controllers\CustomerProfileController;
 use App\Http\Middleware\CustomerAuthMiddleware;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +17,9 @@ Route::middleware([CustomerAuthMiddleware::class])->group(function () {
         Route::get('order/create/choose-restaurant', [CustomerOrderController::class, 'showChooseRestaurant'])->name('dashboard.order.create.chooseRestaurant');
         Route::get('order/create/{franchiseId}/choose-menu', [CustomerOrderController::class, 'showChooseMenu'])->name('dashboard.order.create.chooseMenu');
         Route::post('order/create', [CustomerOrderController::class, 'create'])->name('dashboard.order.create');
+
+        // payment
+        Route::post('payment/upload-receipt', [CustomerPaymentController::class, 'uploadReceipt'])->name('dashboard.payment.uploadReceipt');
 
         // profile
         Route::get('profile', [CustomerProfileController::class, 'show'])->name('dashboard.profile');
