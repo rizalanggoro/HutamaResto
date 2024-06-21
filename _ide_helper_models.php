@@ -71,6 +71,7 @@ namespace App\Models{
  * @property int $user_id
  * @property int $franchise_id
  * @property string $status
+ * @property string|null $receipt_path
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Franchise $franchise
@@ -83,6 +84,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereFranchiseId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereReceiptPath($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereUserId($value)
@@ -121,7 +123,6 @@ namespace App\Models{
  * @property int $id
  * @property string $name
  * @property string $email
- * @property int $id_role
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property mixed $password
  * @property string|null $remember_token
@@ -142,7 +143,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereIdRole($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)

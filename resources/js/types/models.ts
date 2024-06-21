@@ -23,6 +23,7 @@ export type Order = {
   id: number;
   id_user: number;
   status: "waiting_payment" | "processing" | "delivering" | "done";
+  receipt_path: string | undefined;
 };
 
 export type OrderItem = {
