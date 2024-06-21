@@ -3,19 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Models\Menu;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class AdminMenuController extends Controller {
-  public function show() {
+  public function show(Request $request) {
     $franchise = Auth::user()->franchise()->first();
-    $menus = $franchise->menus()->get();
+    $menus = $franchise->menus()->where(function (Builder $query) use ($request) {
+      $filter = $request->query('filter', 'all');
+      return $filter === 'all' ? $query : $query->whereType($filter);
+    })->withCount('orderItems')->get(); // perlu di update bagian ini, supaya cuma order yang aktif yang dapat mencegah penghapusan 
 
-    return Inertia::render('Admin/Dashboard/Menu/Index', [
-      'franchise' => $franchise,
-      'menus' => $menus,
-    ]);
+    return Inertia::render(
+      'Admin/Dashboard/Menu/Index',
+      compact('franchise', 'menus')
+    );
   }
 
   public function showCreate() {
@@ -52,19 +57,19 @@ class AdminMenuController extends Controller {
     return back()->withErrors(['name' => 'Terjadi kesalahan tak terduga!']);
   }
 
-  public function patchAvailability(Request $request, $id) {
+  public function updateAvailability(Request $request, $id) {
     if (Menu::whereId($id)->update(['availability' => $request->availability]))
-      return response(['success' => true], 200);
+      return response(null, Response::HTTP_OK);
     else
-      return response(null, 500);
+      return response(null, Response::HTTP_INTERNAL_SERVER_ERROR);
   }
 
   public function delete($id) {
     $menu = Menu::find($id);
 
     if ($menu->delete())
-      return response(['success' => true], 200);
+      return response(null, Response::HTTP_OK);
     else
-      return response(null, 500);
+      return response(null, Response::HTTP_INTERNAL_SERVER_ERROR);
   }
 }

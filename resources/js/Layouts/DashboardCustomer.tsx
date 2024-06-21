@@ -39,7 +39,7 @@ export default function DashboardCustomerLayout({
 }>) {
   return (
     <>
-      <NavbarComponent variant="xl" user={props.user} />
+      <NavbarComponent variant="xl" />
 
       <ContainerComponent variant="xl" className="h-screen grid grid-cols-12">
         <div className="col-span-2 pt-16">

@@ -15,4 +15,8 @@ class Menu extends Model {
         'availability',
         'type',
     ];
+
+    public function orderItems() {
+        return $this->hasMany(OrderItem::class, 'menu_id');
+    }
 }

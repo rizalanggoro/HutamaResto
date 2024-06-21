@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder {
             FranchisesSeeder::class,
             AdminFranchisesSeeder::class,
             MenusSeeder::class,
+            CustomerOrdersSeeder::class,
         ]);
     }
 }

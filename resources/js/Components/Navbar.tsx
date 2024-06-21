@@ -2,7 +2,7 @@ import { Button } from "@/Components/ui/button";
 import { useTheme } from "@/Providers/Theme";
 import { cn } from "@/lib/utils";
 import { User } from "@/types/models";
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import { LayoutGrid, LogIn, LogOut, Moon, Sun } from "lucide-react";
 import { PropsWithChildren } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
@@ -30,8 +30,8 @@ export default function NavbarComponent({
   ...props
 }: PropsWithChildren<{
   variant?: "xs" | "sm" | "md" | "lg" | "xl";
-  user?: User;
 }>) {
+  const sharedProps = usePage<{ auth: { user: User | null } }>().props;
   const { theme, setTheme } = useTheme();
 
   const onClickButtonSwitchTheme = () => {
@@ -86,7 +86,7 @@ export default function NavbarComponent({
                 </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                {props.user ? (
+                {sharedProps.auth.user ? (
                   <>
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />

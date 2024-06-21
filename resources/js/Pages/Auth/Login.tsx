@@ -32,7 +32,11 @@ export default function Login(
       superadmin: "superadmin.login",
     };
 
-    post(route(routes[props.role]));
+    post(route(routes[props.role]), {
+      onError: (e) => {
+        console.log(e);
+      },
+    });
   };
 
   return (
@@ -41,7 +45,6 @@ export default function Login(
 
       <NavbarComponent />
       <ContainerComponent variant="xs" className="pt-24 pb-8">
-        <p>{props.role}</p>
         <h3 className="text-2xl font-semibold">
           Selamat datang kembali di{" "}
           <span className="text-transparent bg-gradient-to-tr from-primary to-teal-600 bg-clip-text">

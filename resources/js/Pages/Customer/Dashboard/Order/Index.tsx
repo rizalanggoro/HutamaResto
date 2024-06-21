@@ -32,9 +32,9 @@ import {
   TooltipTrigger,
 } from "@/Components/ui/tooltip";
 import DashboardCustomerLayout from "@/Layouts/DashboardCustomer";
-import { orderStatuses } from "@/lib/order-status";
 import { PageProps } from "@/types";
 import { Franchise, Order } from "@/types/models";
+import { orderStatuses } from "@/types/order-status";
 import { Head, Link, router, useForm } from "@inertiajs/react";
 import { Eye, Loader2, PenLine, Trash2, Upload } from "lucide-react";
 import { useState } from "react";
