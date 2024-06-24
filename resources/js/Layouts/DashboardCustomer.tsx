@@ -21,7 +21,7 @@ const menus = [
   },
   {
     title: "Pengaduan saya",
-    route: "dashboard.order",
+    route: "dashboard.complaint",
     icon: <Flag className="w-4 h-4 mr-4" />,
   },
   {

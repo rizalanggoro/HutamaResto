@@ -12,23 +12,24 @@ export type Franchise = {
 
 export type Menu = {
   id: number;
-  id_franchise: number;
+  franchise_id: number;
   name: string;
   description: string;
-  availability: boolean;
+  availability: number;
   type: "food" | "beverage";
 };
 
 export type Order = {
   id: number;
-  id_user: number;
+  user_id: number;
   status: "waiting_payment" | "processing" | "delivering" | "done";
   receipt_path: string | undefined;
 };
 
 export type OrderItem = {
   id: number;
-  id_order: number;
-  id_menu: number;
+  order_id: number;
+  menu_id: number;
   count: number;
+  is_done: number;
 };

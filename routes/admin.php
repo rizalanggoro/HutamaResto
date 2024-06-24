@@ -15,9 +15,11 @@ Route::middleware(AdminAuthMiddleware::class)->prefix('admin')->group(function (
 
     // order
     Route::get('order', [AdminOrderController::class, 'show'])->name('admin.dashboard.order');
-
-    // payment
-    Route::get('payment', [AdminPaymentController::class, 'show'])->name('admin.dashboard.payment');
+    Route::get('order/payment-verification', [AdminOrderController::class, 'showPaymentVerification'])->name('admin.dashboard.order.paymentVerification');
+    Route::patch('order/{orderId}/payment-verification', [AdminOrderController::class, 'verifyPayment'])->name('admin.dashboard.order.verifyPayment');
+    Route::get('order/{orderId}', [AdminOrderController::class, 'showDetail'])->name('admin.dashboard.order.detail');
+    Route::patch('order/{orderId}/mark-as-done', [AdminOrderController::class, 'markOrderAsDone'])->name('admin.dashboard.order.markAsDone');
+    Route::patch('order/order-item/{orderItemId}', [AdminOrderController::class, 'updateIsDoneOrderItem'])->name('admin.dashboard.order.orderItem.updateIsDone');
 
     // menu
     Route::get('menu', [AdminMenuController::class, 'show'])->name('admin.dashboard.menu');
@@ -31,6 +33,6 @@ Route::middleware(AdminAuthMiddleware::class)->prefix('admin')->group(function (
 
     // profile
     Route::get('profile', [AdminProfileController::class, 'show'])->name('admin.dashboard.profile');
-    Route::put('profile', [AdminProfileController::class, 'update'])->name('admin.dashboard.profile');
+    Route::put('profile', [AdminProfileController::class, 'update']);
   });
 });

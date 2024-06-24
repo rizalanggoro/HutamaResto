@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CustomerComplaintController;
 use App\Http\Controllers\CustomerDashboardController;
 use App\Http\Controllers\CustomerOrderController;
 use App\Http\Controllers\CustomerPaymentController;
@@ -17,6 +18,9 @@ Route::middleware([CustomerAuthMiddleware::class])->group(function () {
         Route::get('order/create/choose-restaurant', [CustomerOrderController::class, 'showChooseRestaurant'])->name('dashboard.order.create.chooseRestaurant');
         Route::get('order/create/{franchiseId}/choose-menu', [CustomerOrderController::class, 'showChooseMenu'])->name('dashboard.order.create.chooseMenu');
         Route::post('order/create', [CustomerOrderController::class, 'create'])->name('dashboard.order.create');
+
+        // complaint
+        Route::get('complaint', [CustomerComplaintController::class, 'show'])->name('dashboard.complaint');
 
         // payment
         Route::post('payment/upload-receipt', [CustomerPaymentController::class, 'uploadReceipt'])->name('dashboard.payment.uploadReceipt');

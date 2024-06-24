@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('order_id');
             $table->unsignedBigInteger('menu_id');
             $table->unsignedInteger('count');
+            $table->boolean('is_done')->default(false);
             $table->timestamps();
         });
 

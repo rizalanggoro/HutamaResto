@@ -77,7 +77,7 @@ export default function Page(
       </Head>
 
       <DashboardCustomerLayout>
-        <div className="py-8">
+        <div className="py-8 pr-2">
           <BreadcrumbComponent
             items={[
               {
@@ -216,37 +216,35 @@ export default function Page(
               . Bukti pembayaran dapat berupa screenshot transfer atau yang
               lainnya
             </DialogDescription>
-
-            <div className="space-y-1">
-              <Label htmlFor="receipt">Bukti pembayaran</Label>
-              <Input
-                id="receipt"
-                type="file"
-                accept="image/*"
-                onChange={(e) => {
-                  const files = e.target.files;
-                  if (files) {
-                    const file = files[0];
-                    setData({ ...data, receipt: file });
-                  }
-                }}
-              />
-            </div>
-
-            <DialogFooter className="pt-4">
-              <Button
-                onClick={onClickButtonUploadReceipt}
-                disabled={processing}
-              >
-                {processing ? (
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                ) : (
-                  <Upload className="w-4 h-4 mr-2" />
-                )}
-                {processing ? "Mengunggah" : "Unggah"}
-              </Button>
-            </DialogFooter>
           </DialogHeader>
+
+          <div className="space-y-2">
+            <Label htmlFor="receipt">Bukti pembayaran</Label>
+            <Input
+              className="file:text-foreground"
+              id="receipt"
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const files = e.target.files;
+                if (files) {
+                  const file = files[0];
+                  setData({ ...data, receipt: file });
+                }
+              }}
+            />
+          </div>
+
+          <DialogFooter className="pt-4">
+            <Button onClick={onClickButtonUploadReceipt} disabled={processing}>
+              {processing ? (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              ) : (
+                <Upload className="w-4 h-4 mr-2" />
+              )}
+              {processing ? "Mengunggah" : "Unggah"}
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </>

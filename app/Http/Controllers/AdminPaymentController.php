@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Storage;
 
+// deprecated
 class AdminPaymentController extends Controller {
     public function show() {
         $franchise = Auth::user()->franchise()->firstOrFail();
@@ -17,5 +18,8 @@ class AdminPaymentController extends Controller {
         });
 
         return Inertia::render('Admin/Dashboard/Payment/Index', compact('orders'));
+    }
+
+    public function confirmPayment(Request $request) {
     }
 }

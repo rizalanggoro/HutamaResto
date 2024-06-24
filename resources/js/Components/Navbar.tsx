@@ -47,7 +47,10 @@ export default function NavbarComponent({
             maxW[variant]
           )}
         >
-          <Button variant={"link"} className="font-semibold text-foreground">
+          <Button
+            variant={"link"}
+            className="font-semibold text-foreground px-0"
+          >
             <Link href={route("home")}>HutamaResto</Link>
           </Button>
 
