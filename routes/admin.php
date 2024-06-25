@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AdminManageController;
 use App\Http\Controllers\AdminMenuController;
 use App\Http\Controllers\AdminOrderController;
 use App\Http\Controllers\AdminPaymentController;
@@ -34,5 +35,8 @@ Route::middleware(AdminAuthMiddleware::class)->prefix('admin')->group(function (
     // profile
     Route::get('profile', [AdminProfileController::class, 'show'])->name('admin.dashboard.profile');
     Route::put('profile', [AdminProfileController::class, 'update']);
+
+    // manage admin
+    Route::get('manage-admin', [AdminManageController::class, 'show'])->name('admin.dashboard.manageAdmin');
   });
 });

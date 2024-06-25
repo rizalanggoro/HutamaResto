@@ -9,7 +9,7 @@ import {
   TooltipTrigger,
 } from "@/Components/ui/tooltip";
 import { Link } from "@inertiajs/react";
-import { Home, Info, ListChecks, UtensilsCrossed } from "lucide-react";
+import { Home, Info, ListChecks, UserCog, UtensilsCrossed } from "lucide-react";
 import React from "react";
 
 type Props = {
@@ -50,6 +50,11 @@ const menus: {
     title: "Profil restoran",
     route: "admin.dashboard.profile",
     icon: <Info className="w-4 h-4" />,
+  },
+  {
+    title: "Kelola admin",
+    route: "admin.dashboard.manageAdmin",
+    icon: <UserCog className="w-4 h-4" />,
   },
 ];
 
