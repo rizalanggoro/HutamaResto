@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use Hash;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -40,7 +42,8 @@ class AuthController extends Controller {
       'email.email' => 'Alamat email tidak valid!',
       'email.required' => 'Alamat email tidak boleh kosong!',
       'email.string' => 'Alamat email tidak boleh kosong!',
-      'password.required' => 'Kata sandi tidak boleh kosong!', 'password.string' => 'Kata sandi tidak boleh kosong!'
+      'password.required' => 'Kata sandi tidak boleh kosong!',
+      'password.string' => 'Kata sandi tidak boleh kosong!'
     ]);
 
     if (Auth::attempt([
@@ -63,6 +66,40 @@ class AuthController extends Controller {
   }
 
   public function register(Request $request) {
+    $credentials = $request->validate([
+      'name' => ['string', 'required'],
+      'email' => ['email', 'string', 'required', 'unique:users'],
+      'password' => ['string', 'required'],
+      'confirmPassword' => ['string', 'required', 'same:password'],
+    ], [
+      'email.email' => 'Alamat email tidak valid!',
+      'email.required' => 'Alamat email tidak boleh kosong!',
+      'email.string' => 'Alamat email tidak boleh kosong!',
+      'email.unique' => 'Alamat email yang Anda gunakan sudah terdaftar!',
+      'password.required' => 'Kata sandi tidak boleh kosong!',
+      'password.string' => 'Kata sandi tidak boleh kosong!',
+      'confirmPassword.required' => 'Konfirmasi kata sandi tidak boleh kosong!',
+      'password.string' => 'Konfirmasi kata sandi tidak boleh kosong!',
+      'confirmPassword.same' => 'Konfirmasi kata sandi tidak cocok!',
+    ]);
+
+    if (User::create([
+      'name' => $credentials['name'],
+      'email' => $credentials['email'],
+      'password' => Hash::make($credentials['password']),
+      'role' => 'customer',
+    ])) {
+      if (Auth::attempt([
+        'email' => $credentials['email'],
+        'password' => $credentials['password'],
+        'role' => 'customer',
+      ])) {
+        $request->session()->regenerate();
+        return redirect()->intended(route('dashboard'));
+      }
+    }
+
+    return back()->withErrors(['email' => 'Informasi yang Anda masukkan tidak valid!']);
   }
 
   public function logout(Request $request): RedirectResponse {
