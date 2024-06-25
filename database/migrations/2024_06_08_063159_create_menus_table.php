@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->string('description');
             $table->boolean('availability');
             $table->enum('type', ['food', 'beverage']);
+            $table->bigInteger('price');
             $table->timestamps();
         });
 

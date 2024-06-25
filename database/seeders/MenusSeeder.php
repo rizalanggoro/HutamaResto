@@ -21,6 +21,7 @@ class MenusSeeder extends Seeder {
                     'description' => 'Deskripsi untuk makanan ke-' . $food,
                     'availability' => true,
                     'type' => 'food',
+                    'price' => rand(1, 25) * 1000,
                 ]);
             }
 
@@ -31,6 +32,7 @@ class MenusSeeder extends Seeder {
                     'description' => 'Deskripsi untuk minuman ke-' . $beverage,
                     'availability' => true,
                     'type' => 'beverage',
+                    'price' => rand(1, 25) * 1000,
                 ]);
             }
         }
