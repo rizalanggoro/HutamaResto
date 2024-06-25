@@ -13,11 +13,18 @@ Route::middleware([CustomerAuthMiddleware::class])->group(function () {
         Route::get('/', [CustomerDashboardController::class, 'show'])->name('dashboard');
 
         // order
-        Route::get('order', [CustomerOrderController::class, 'show'])->name('dashboard.order');
-        Route::get('order/detail/{id_order}', [CustomerOrderController::class, 'showDetail'])->name('dashboard.order.detail');
-        Route::get('order/create/choose-restaurant', [CustomerOrderController::class, 'showChooseRestaurant'])->name('dashboard.order.create.chooseRestaurant');
-        Route::get('order/create/{franchiseId}/choose-menu', [CustomerOrderController::class, 'showChooseMenu'])->name('dashboard.order.create.chooseMenu');
+        Route::get('order', [CustomerOrderController::class, 'show'])
+            ->name('dashboard.order');
         Route::post('order', [CustomerOrderController::class, 'create']);
+
+        Route::get('order/detail/{id_order}', [CustomerOrderController::class, 'showDetail'])
+            ->name('dashboard.order.detail');
+        Route::get('order/choose-restaurant', [CustomerOrderController::class, 'showChooseRestaurant'])
+            ->name('dashboard.order.create.chooseRestaurant');
+        Route::get('order/restaurant/{franchiseId}/choose-menu', [CustomerOrderController::class, 'showChooseMenu'])
+            ->name('dashboard.order.create.chooseMenu');
+        Route::delete('order/{id}', [CustomerOrderController::class, 'delete'])
+            ->name('dashboard.order.delete');
 
         // complaint
         Route::get('complaint', [CustomerComplaintController::class, 'show'])->name('dashboard.complaint');

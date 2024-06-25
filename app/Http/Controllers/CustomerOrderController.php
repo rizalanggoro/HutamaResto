@@ -9,13 +9,21 @@ use Auth;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class CustomerOrderController extends Controller {
-  public function show() {
+  public function show(Request $request) {
     $user = Auth::user();
-    $orders = $user->orders()->with('franchise')->get();
+    $orders = $user->orders()
+      ->orderBy('created_at', 'desc')
+      ->where(function (Builder $query) use ($request) {
+        $status = $request->query('status', 'all');
+        return $status === 'all' ? $query : $query->whereStatus($status);
+      })
+      ->with('franchise')
+      ->get();
 
     return Inertia::render("Customer/Dashboard/Order/Index", [
       'user' => $user,
@@ -73,5 +81,12 @@ class CustomerOrderController extends Controller {
     } catch (Exception $e) {
       return response($e->getMessage(), 500);
     }
+  }
+
+  public function delete($id) {
+    $order = Order::whereId($id)->firstOrFail();
+    $order->delete();
+
+    return response(null, Response::HTTP_OK);
   }
 }

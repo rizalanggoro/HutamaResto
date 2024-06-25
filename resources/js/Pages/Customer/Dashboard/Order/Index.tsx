@@ -1,6 +1,16 @@
 import BreadcrumbComponent from "@/Components/Breadcrumb";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/Components/ui/alert-dialog";
 import { Badge } from "@/Components/ui/badge";
 import { Button } from "@/Components/ui/button";
+import { Card } from "@/Components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -39,24 +49,23 @@ import { Head, Link, router, useForm } from "@inertiajs/react";
 import { Eye, Loader2, PenLine, Trash2, Upload } from "lucide-react";
 import { useState } from "react";
 
+type OrderType = Order & { franchise: Franchise };
+
 export default function Page(
   props: PageProps<{
-    orders: (Order & {
-      franchise: Franchise;
-    })[];
-  }>
+    orders: OrderType[];
+  }>,
 ) {
+  const [selectedOrder, setSelectedOrder] = useState<OrderType>();
+  const [isDialogUploadReceiptOpen, setIsDialogUploadReceiptOpen] =
+    useState(false);
+  const [isDialogConfirmDeleteOrderOpen, setIsDialogConfirmDeleteOrderOpen] =
+    useState(false);
+
   const { data, setData, post, processing } = useForm({
     orderId: -1,
     receipt: null as File | null,
   });
-
-  const [selectedOrder, setSelectedOrder] = useState<
-    (Order & { franchise: Franchise }) | undefined
-  >();
-  const [isDialogUploadReceiptOpen, setIsDialogUploadReceiptOpen] =
-    useState(false);
-
   const onClickButtonUploadReceipt = () => {
     if (data.orderId !== -1 && data.receipt) {
       post(route("dashboard.payment.uploadReceipt"), {
@@ -70,6 +79,20 @@ export default function Page(
     }
   };
 
+  const formDeleteOrder = useForm();
+  const onClickButtonDeleteOrder = () =>
+    formDeleteOrder.delete(
+      route("dashboard.order.delete", {
+        id: selectedOrder?.id,
+      }),
+      {
+        onFinish: () => {
+          setSelectedOrder(undefined);
+          setIsDialogConfirmDeleteOrderOpen(false);
+        },
+      },
+    );
+
   return (
     <>
       <Head>
@@ -77,7 +100,7 @@ export default function Page(
       </Head>
 
       <DashboardCustomerLayout>
-        <div className="py-8 pr-2">
+        <div>
           <BreadcrumbComponent
             items={[
               {
@@ -97,7 +120,7 @@ export default function Page(
               </p>
             </div>
 
-            <Button asChild>
+            <Button asChild variant={"outline"}>
               <Link href={route("dashboard.order.create.chooseRestaurant")}>
                 <PenLine className="w-4 h-4 mr-2" />
                 Baru
@@ -106,8 +129,19 @@ export default function Page(
           </div>
 
           <div className="mt-8">
-            <Select>
-              <SelectTrigger className="w-full">
+            <Select
+              defaultValue={
+                (route().params.status as string | undefined) ?? "all"
+              }
+              onValueChange={(e) =>
+                router.reload({
+                  data: {
+                    status: e === "all" ? undefined : e,
+                  },
+                })
+              }
+            >
+              <SelectTrigger className="max-w-72">
                 <SelectValue placeholder="Lihat berdasarkan status" />
               </SelectTrigger>
               <SelectContent>
@@ -122,79 +156,90 @@ export default function Page(
             </Select>
           </div>
 
-          <Table className="mt-4">
-            <TableHeader>
-              <TableRow>
-                <TableHead>No</TableHead>
-                <TableHead>Nama Resto</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Aksi</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {props.orders.map((order, index) => (
+          <Card className="mt-4">
+            <Table>
+              <TableHeader>
                 <TableRow>
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell>{order.franchise.name}</TableCell>
-                  <TableCell>
-                    <Badge variant={"outline"} className="lowercase">
-                      {orderStatuses[order.status]}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="flex gap-1 items-center">
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button asChild variant={"outline"} size={"icon"}>
-                          <Link
-                            href={route("dashboard.order.detail", {
-                              id_order: order.id,
-                            })}
-                          >
-                            <Eye className="w-4 h-4" />
-                          </Link>
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Lihat detail pemesanan</p>
-                      </TooltipContent>
-                    </Tooltip>
-
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant={"outline"}
-                          size={"icon"}
-                          onClick={() => {
-                            setIsDialogUploadReceiptOpen(true);
-                            setSelectedOrder(order);
-                            setData({ ...data, orderId: order.id });
-                          }}
-                        >
-                          <Upload className="w-4 h-4" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Unggah bukti pembayaran</p>
-                      </TooltipContent>
-                    </Tooltip>
-
-                    {order.status === "waiting_payment" && (
+                  <TableHead>No</TableHead>
+                  <TableHead>Nama Resto</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Aksi</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {props.orders.map((order, index) => (
+                  <TableRow key={"order-item-" + index}>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{order.franchise.name}</TableCell>
+                    <TableCell>
+                      <Badge variant={"outline"} className="lowercase">
+                        {orderStatuses[order.status]}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="flex gap-1 items-center">
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Button variant={"destructive"} size={"icon"}>
-                            <Trash2 className="w-4 h-4" />
+                          <Button asChild variant={"outline"} size={"icon"}>
+                            <Link
+                              href={route("dashboard.order.detail", {
+                                id_order: order.id,
+                              })}
+                            >
+                              <Eye className="w-4 h-4" />
+                            </Link>
                           </Button>
                         </TooltipTrigger>
                         <TooltipContent>
-                          <p>Batalkan pemesanan</p>
+                          <p>Lihat detail pemesanan</p>
                         </TooltipContent>
                       </Tooltip>
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+
+                      {order.status === "waiting_payment" && (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant={"outline"}
+                              size={"icon"}
+                              onClick={() => {
+                                setIsDialogUploadReceiptOpen(true);
+                                setSelectedOrder(order);
+                                setData({ ...data, orderId: order.id });
+                              }}
+                            >
+                              <Upload className="w-4 h-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Unggah bukti pembayaran</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      )}
+
+                      {order.status === "waiting_payment" && (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant={"destructive"}
+                              size={"icon"}
+                              onClick={() => {
+                                setSelectedOrder(order);
+                                setIsDialogConfirmDeleteOrderOpen(true);
+                              }}
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Batalkan pemesanan</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Card>
         </div>
       </DashboardCustomerLayout>
 
@@ -247,6 +292,37 @@ export default function Page(
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* dialog confirm delete order */}
+      <AlertDialog
+        open={isDialogConfirmDeleteOrderOpen}
+        onOpenChange={(e) => setIsDialogConfirmDeleteOrderOpen(e)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Konfirmasi Pembatalan Pesanan</AlertDialogTitle>
+            <AlertDialogDescription>
+              Apakah Anda yakin akan membatalkan pemesanan menu dari{" "}
+              {selectedOrder?.franchise.name ?? "-"}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={formDeleteOrder.processing}>
+              Tidak
+            </AlertDialogCancel>
+            <Button
+              variant={"destructive"}
+              onClick={onClickButtonDeleteOrder}
+              disabled={formDeleteOrder.processing}
+            >
+              {formDeleteOrder.processing && (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              )}
+              Ya, batalkan
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }
