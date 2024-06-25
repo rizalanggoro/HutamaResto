@@ -67,7 +67,7 @@ export default function DashboardCustomerLayout({
           </ScrollArea>
         </div>
         <Separator orientation="vertical" />
-        <div className="pt-16">
+        <div className="pt-16 flex-1">
           <ScrollArea className="w-full h-[calc(100vh-4rem)]">
             <div className="p-8">{children}</div>
           </ScrollArea>

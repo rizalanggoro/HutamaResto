@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('franchise_id');
             $table->enum('status', ['waiting_payment', 'waiting_payment_verification', 'processing', 'delivering', 'done'])->default('waiting_payment');
             $table->string('receipt_path')->nullable();
+            $table->longText('message')->nullable();
             $table->timestamps();
         });
 

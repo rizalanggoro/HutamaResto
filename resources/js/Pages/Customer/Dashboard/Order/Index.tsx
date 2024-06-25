@@ -182,7 +182,7 @@ export default function Page(
                           <Button asChild variant={"outline"} size={"icon"}>
                             <Link
                               href={route("dashboard.order.detail", {
-                                id_order: order.id,
+                                id: order.id,
                               })}
                             >
                               <Eye className="w-4 h-4" />

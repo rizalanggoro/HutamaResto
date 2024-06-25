@@ -17,7 +17,7 @@ Route::middleware([CustomerAuthMiddleware::class])->group(function () {
             ->name('dashboard.order');
         Route::post('order', [CustomerOrderController::class, 'create']);
 
-        Route::get('order/detail/{id_order}', [CustomerOrderController::class, 'showDetail'])
+        Route::get('order/detail/{id}', [CustomerOrderController::class, 'showDetail'])
             ->name('dashboard.order.detail');
         Route::get('order/choose-restaurant', [CustomerOrderController::class, 'showChooseRestaurant'])
             ->name('dashboard.order.create.chooseRestaurant');

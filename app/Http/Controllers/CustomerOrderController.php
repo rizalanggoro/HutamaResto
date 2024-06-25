@@ -49,12 +49,15 @@ class CustomerOrderController extends Controller {
     );
   }
 
-  public function showDetail($id_order) {
-    $order = Order::whereId($id_order)->with(['franchise', 'orderItems', 'orderItems.menu'])->first();
+  public function showDetail($id) {
+    $order = Order::whereId($id)
+      ->with(['franchise', 'orderItems', 'orderItems.menu'])
+      ->firstOrFail();
 
-    return Inertia::render('Customer/Dashboard/Order/Detail', [
-      'order' => $order,
-    ]);
+    return Inertia::render(
+      'Customer/Dashboard/Order/Detail',
+      compact('order')
+    );
   }
 
   public function create(Request $request) {
