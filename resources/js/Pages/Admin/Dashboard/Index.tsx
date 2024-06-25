@@ -1,45 +1,110 @@
 import BreadcrumbComponent from "@/Components/Breadcrumb";
+import { Badge } from "@/Components/ui/badge";
 import { Button } from "@/Components/ui/button";
+import { Card, CardFooter, CardHeader, CardTitle } from "@/Components/ui/card";
+import { Label } from "@/Components/ui/label";
 import DashboardAdminLayout from "@/Layouts/DashboardAdmin";
-import { Link } from "@inertiajs/react";
-import { LogOut } from "lucide-react";
+import { PageProps } from "@/types";
+import { Franchise } from "@/types/models";
+import { Head, Link } from "@inertiajs/react";
+import { ChevronRight } from "lucide-react";
 
-type Props = {
-    user: any;
-    franchise: any;
-};
+export default function Page(
+  props: PageProps<{
+    franchise: Franchise;
+    orderWaitingPaymentVerificationCount: number;
+    orderProcessingCount: number;
+  }>,
+) {
+  return (
+    <>
+      <Head title="Halaman Utama" />
+      <DashboardAdminLayout>
+        <div>
+          <BreadcrumbComponent items={[{ title: "Halaman utama" }]} />
 
-export default function Page(props: Props) {
-    return (
-        <>
-            <DashboardAdminLayout>
-                <div className="py-8">
-                    <BreadcrumbComponent
-                        items={[
-                            {
-                                title: "Halaman utama",
-                            },
-                        ]}
+          <p className="text-2xl font-semibold mt-4">
+            Halo, {props.auth.user.name}
+          </p>
+          <p className="text-muted-foreground mt-2">
+            Berikut adalah beberapa ringkasan singkat mengenai berbagai aspek
+            pengelolaan restoran yang Anda kelola: {props.franchise.name}
+          </p>
+
+          <div className="flex gap-2 mt-8">
+            {/* grid left */}
+            <div className="flex flex-col flex-1 gap-2">
+              <Card>
+                <CardHeader className="space-y-4">
+                  <Label>Profile restoran Anda</Label>
+                  <div className="flex items-center gap-4">
+                    <img
+                      src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                      className="w-32 object-cover h-24 rounded"
                     />
+                    <div>
+                      <p className="font-semibold text-lg">
+                        {props.franchise.name}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {props.franchise.address}
+                      </p>
+                      <Badge className="mt-2">Buka</Badge>
+                    </div>
+                  </div>
+                </CardHeader>
+              </Card>
 
-                    <p className="text-2xl font-semibold mt-4">
-                        Halo, {props.user.name}
-                    </p>
-                    <p>
-                        Berikut ringkasan untuk franchise yang Anda kelola:{" "}
-                        <span className="font-semibold">
-                            {props.franchise.name}
-                        </span>
-                    </p>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-2xl">
+                    {props.orderProcessingCount} pesanan
+                  </CardTitle>
+                  <p className="text-muted-foreground">
+                    Restoran Anda sedang memproses{" "}
+                    {props.orderWaitingPaymentVerificationCount} pesanan untuk
+                    segera diselesaikan dan disajikan kepada customer
+                  </p>
+                </CardHeader>
+                <CardFooter className="flex justify-end">
+                  <Button variant={"link"} asChild className="px-0">
+                    <Link href={route("admin.dashboard.order")}>
+                      Lihat pesanan
+                      <ChevronRight className="w-4 h-4 ml-2" />
+                    </Link>
+                  </Button>
+                </CardFooter>
+              </Card>
+            </div>
 
-                    <Button asChild variant={"destructive"} className="mt-8">
-                        <Link href={route("logout")} method="post">
-                            <LogOut className="w-4 h-4 mr-2" />
-                            Keluar
-                        </Link>
-                    </Button>
-                </div>
-            </DashboardAdminLayout>
-        </>
-    );
+            {/* grid right */}
+            <div className="flex flex-col flex-1 gap-2">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-2xl">
+                    {props.orderWaitingPaymentVerificationCount} verifikasi
+                  </CardTitle>
+                  <p className="text-muted-foreground">
+                    Restoran Anda memiliki{" "}
+                    {props.orderWaitingPaymentVerificationCount} pembayaran yang
+                    menunggu untuk proses verifikasi agar dapat segera diproses
+                  </p>
+                </CardHeader>
+                <CardFooter className="flex justify-end">
+                  <Button variant={"link"} asChild className="px-0">
+                    <Link
+                      href={route("admin.dashboard.order.paymentVerification")}
+                    >
+                      Lakukan verifikasi
+                      <ChevronRight className="w-4 h-4 ml-2" />
+                    </Link>
+                  </Button>
+                </CardFooter>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </DashboardAdminLayout>
+    </>
+  );
 }
