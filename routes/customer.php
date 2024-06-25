@@ -17,7 +17,7 @@ Route::middleware([CustomerAuthMiddleware::class])->group(function () {
         Route::get('order/detail/{id_order}', [CustomerOrderController::class, 'showDetail'])->name('dashboard.order.detail');
         Route::get('order/create/choose-restaurant', [CustomerOrderController::class, 'showChooseRestaurant'])->name('dashboard.order.create.chooseRestaurant');
         Route::get('order/create/{franchiseId}/choose-menu', [CustomerOrderController::class, 'showChooseMenu'])->name('dashboard.order.create.chooseMenu');
-        Route::post('order/create', [CustomerOrderController::class, 'create'])->name('dashboard.order.create');
+        Route::post('order', [CustomerOrderController::class, 'create']);
 
         // complaint
         Route::get('complaint', [CustomerComplaintController::class, 'show'])->name('dashboard.complaint');

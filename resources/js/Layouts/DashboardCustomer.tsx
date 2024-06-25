@@ -2,8 +2,13 @@ import ContainerComponent from "@/Components/Container";
 import NavbarComponent from "@/Components/Navbar";
 import { Button } from "@/Components/ui/button";
 import { ScrollArea } from "@/Components/ui/scroll-area";
+import { Separator } from "@/Components/ui/separator";
 import { Toaster } from "@/Components/ui/toaster";
-import { User } from "@/types/models";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/Components/ui/tooltip";
 import { Link } from "@inertiajs/react";
 import { Flag, Home, ListChecks, UserRound } from "lucide-react";
 import { PropsWithChildren } from "react";
@@ -12,58 +17,59 @@ const menus = [
   {
     title: "Halaman utama",
     route: "dashboard",
-    icon: <Home className="w-4 h-4 mr-4" />,
+    icon: <Home className="w-4 h-4" />,
   },
   {
     title: "Pesanan saya",
     route: "dashboard.order",
-    icon: <ListChecks className="w-4 h-4 mr-4" />,
+    icon: <ListChecks className="w-4 h-4" />,
   },
   {
     title: "Pengaduan saya",
     route: "dashboard.complaint",
-    icon: <Flag className="w-4 h-4 mr-4" />,
+    icon: <Flag className="w-4 h-4" />,
   },
   {
     title: "Profil saya",
     route: "dashboard.profile",
-    icon: <UserRound className="w-4 h-4 mr-4" />,
+    icon: <UserRound className="w-4 h-4" />,
   },
 ];
 
 export default function DashboardCustomerLayout({
   children,
-  ...props
-}: PropsWithChildren<{
-  user?: User;
-}>) {
+}: PropsWithChildren) {
   return (
     <>
       <NavbarComponent variant="xl" />
 
-      <ContainerComponent variant="xl" className="h-screen grid grid-cols-12">
-        <div className="col-span-2 pt-16">
+      <ContainerComponent variant="xl" className="h-screen flex">
+        <div className="pt-16">
           <ScrollArea className="w-full h-[calc(100vh-4rem)]">
-            <div className="flex flex-col gap-1 py-8 pr-4">
+            <div className="flex flex-col gap-1 py-6 pr-4">
               {menus.map((menu, index) => (
-                <Button
-                  key={"dashboard-admin-navigation-item-" + index}
-                  variant={route().current(menu.route) ? "secondary" : "link"}
-                  asChild
-                  className="justify-start text-foreground"
-                >
-                  <Link href={route(menu.route)}>
-                    {menu.icon}
-                    {menu.title}
-                  </Link>
-                </Button>
+                <Tooltip key={"dashboard-admin-navigation-item-" + index}>
+                  <TooltipTrigger asChild>
+                    <Button
+                      size={"icon"}
+                      variant={
+                        route().current(menu.route) ? "secondary" : "ghost"
+                      }
+                      asChild
+                    >
+                      <Link href={route(menu.route)}>{menu.icon}</Link>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">{menu.title}</TooltipContent>
+                </Tooltip>
               ))}
             </div>
           </ScrollArea>
         </div>
-        <div className="col-span-10 pt-16">
+        <Separator orientation="vertical" />
+        <div className="pt-16">
           <ScrollArea className="w-full h-[calc(100vh-4rem)]">
-            <div className="pl-4">{children}</div>
+            <div className="p-8">{children}</div>
           </ScrollArea>
         </div>
       </ContainerComponent>
