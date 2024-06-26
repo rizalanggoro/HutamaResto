@@ -9,6 +9,7 @@ import {
   Info,
   ListChecks,
   LogOut,
+  MessageSquareWarning,
   UserCog,
   UtensilsCrossed,
 } from "lucide-react";
@@ -33,6 +34,11 @@ const menus: {
     title: "Daftar menu",
     route: "admin.dashboard.menu",
     icon: <UtensilsCrossed className="w-4 h-4" />,
+  },
+  {
+    title: "Daftar aduan",
+    route: "admin.dashboard.complaint",
+    icon: <MessageSquareWarning className="w-4 h-4" />,
   },
   {
     title: "Profil restoran",

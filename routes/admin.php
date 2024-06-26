@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminComplaintController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AdminManageController;
 use App\Http\Controllers\AdminMenuController;
@@ -28,6 +29,10 @@ Route::middleware(AdminAuthMiddleware::class)->prefix('admin')->group(function (
     Route::patch('menu/{id}/availability', [AdminMenuController::class, 'updateAvailability'])->name('admin.dashboard.menu.updateAvailability');
     Route::get('menu/create', [AdminMenuController::class, 'showCreate'])->name('admin.dashboard.menu.create');
     Route::post('menu/create', [AdminMenuController::class, 'create'])->name('admin.dashboard.menu.create');
+
+    // complaint
+    Route::get('complaint', [AdminComplaintController::class, 'show'])
+      ->name('admin.dashboard.complaint');
 
     // promo
     Route::get('promo', fn () => 'hello world')->name('admin.dashboard.promo');
