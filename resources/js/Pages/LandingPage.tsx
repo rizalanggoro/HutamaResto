@@ -17,7 +17,7 @@ export default function LandingPage(
   props: PageProps<{
     franchises: Franchise[];
     user?: User;
-  }>
+  }>,
 ) {
   return (
     <>
@@ -25,7 +25,7 @@ export default function LandingPage(
         <title>Halaman utama</title>
       </Head>
 
-      <NavbarComponent user={props.user} />
+      <NavbarComponent />
 
       <ContainerComponent>
         <main className="pt-16 pb-8">

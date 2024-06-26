@@ -1,6 +1,17 @@
 import BreadcrumbComponent from "@/Components/Breadcrumb";
 import { Button } from "@/Components/ui/button";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/Components/ui/dialog";
+import { Input } from "@/Components/ui/input";
+import { Label } from "@/Components/ui/label";
+import {
   Table,
   TableBody,
   TableCell,
@@ -34,7 +45,7 @@ export default function Page(
           <div className="mt-4 flex items-center gap-4 justify-between">
             <div>
               <p className="text-2xl font-semibold ">Kelola Admin</p>
-              <p className="mt-2">
+              <p className="mt-2 text-muted-foreground">
                 Berikut daftar beberapa admin yang memiliki hak akses untuk
                 mengelola {props.franchise.name}
               </p>
@@ -71,6 +82,32 @@ export default function Page(
           </Table>
         </div>
       </DashboardAdminLayout>
+
+      {/* dialog find user */}
+      <Dialog open>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Tambah Admin</DialogTitle>
+            <DialogDescription>
+              Masukkan alamat email dari akun pengguna yang akan ditambahkan
+              sebagai admin restoran
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-1">
+            <Label>Alamat email</Label>
+            <Input />
+          </div>
+
+          <DialogFooter>
+            <Button>
+              <Plus className="w-4 h-4 mr-2" />
+              Tambah
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
