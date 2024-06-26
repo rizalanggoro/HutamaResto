@@ -14,6 +14,8 @@ Route::middleware(AdminAuthMiddleware::class)->prefix('admin')->group(function (
   Route::prefix('dashboard')->group(function () {
     // dashboard
     Route::get('/', [AdminDashboardController::class, 'show'])->name('admin.dashboard');
+    Route::patch('profile/update/open', [AdminDashboardController::class, 'updateOpenStatus'])
+      ->name('admin.dashboard.updateOpenStatus');
 
     // order
     Route::get('order', [AdminOrderController::class, 'show'])->name('admin.dashboard.order');

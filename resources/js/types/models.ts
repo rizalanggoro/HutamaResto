@@ -8,6 +8,7 @@ export type Franchise = {
   id: number;
   name: string;
   address: string;
+  is_open: number;
 };
 
 export type Menu = {

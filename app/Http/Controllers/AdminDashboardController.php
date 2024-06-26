@@ -25,4 +25,10 @@ class AdminDashboardController extends Controller {
       )
     );
   }
+
+  public function updateOpenStatus() {
+    $franchise = Auth::user()->franchise()->firstOrFail();
+    $franchise->is_open = $franchise->is_open === 0 ? 1 : 0;
+    $franchise->save();
+  }
 }

@@ -6,8 +6,8 @@ import { Label } from "@/Components/ui/label";
 import DashboardAdminLayout from "@/Layouts/DashboardAdmin";
 import { PageProps } from "@/types";
 import { Franchise } from "@/types/models";
-import { Head, Link } from "@inertiajs/react";
-import { ChevronRight } from "lucide-react";
+import { Head, Link, useForm } from "@inertiajs/react";
+import { ChevronRight, Loader2 } from "lucide-react";
 
 export default function Page(
   props: PageProps<{
@@ -16,6 +16,8 @@ export default function Page(
     orderProcessingCount: number;
   }>,
 ) {
+  const formUpdateOpen = useForm();
+
   return (
     <>
       <Head title="Halaman Utama" />
@@ -49,9 +51,32 @@ export default function Page(
                       <p className="text-sm text-muted-foreground">
                         {props.franchise.address}
                       </p>
-                      <Badge className="mt-2">Buka</Badge>
+                      <Badge
+                        className="mt-2"
+                        variant={
+                          props.franchise.is_open === 0 ? "outline" : "default"
+                        }
+                      >
+                        {props.franchise.is_open === 0 ? "Tutup" : "Buka"}
+                      </Badge>
                     </div>
                   </div>
+                  <Button
+                    variant={"outline"}
+                    disabled={formUpdateOpen.processing}
+                    onClick={() =>
+                      formUpdateOpen.patch(
+                        route("admin.dashboard.updateOpenStatus"),
+                      )
+                    }
+                  >
+                    {formUpdateOpen.processing && (
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    )}
+                    {props.franchise.is_open === 1
+                      ? "Tutup restoran"
+                      : "Buka restoran"}
+                  </Button>
                 </CardHeader>
               </Card>
 
