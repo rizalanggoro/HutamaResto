@@ -96,7 +96,7 @@ export default function DashboardAdminLayout({ children }: PropsWithChildren) {
 
             {/* logout */}
             <Button asChild variant={"destructive"} className="w-full mt-4">
-              <Link href={route("logout")}>
+              <Link href={route("logout")} method="post" as="button">
                 <LogOut className="w-4 h-4 mr-4" />
                 Keluar
               </Link>

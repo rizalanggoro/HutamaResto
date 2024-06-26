@@ -9,6 +9,7 @@ import {
   AlertDialogTitle,
 } from "@/Components/ui/alert-dialog";
 import { Button } from "@/Components/ui/button";
+import { Card } from "@/Components/ui/card";
 import {
   Table,
   TableBody,
@@ -32,7 +33,7 @@ export default function Page(
   props: PageProps<{
     franchise: Franchise;
     menus: CustomMenu[];
-  }>
+  }>,
 ) {
   const [selectedMenu, setSelectedMenu] = useState<CustomMenu>();
 
@@ -56,7 +57,7 @@ export default function Page(
           setSelectedMenu(undefined);
           setIsDialogUpdateMenuAvailabilityOpen(false);
         },
-      }
+      },
     );
 
   const onClickButtonDeleteMenu = () =>
@@ -68,15 +69,14 @@ export default function Page(
           setSelectedMenu(undefined);
           setIsDialogDeleteMenuOpen(false);
         },
-      }
+      },
     );
 
   return (
     <>
       <Head title="Daftar menu" />
-
       <DashboardAdminLayout>
-        <div className="py-8 pr-2">
+        <div>
           <BreadcrumbComponent
             items={[
               {
@@ -89,11 +89,13 @@ export default function Page(
             ]}
           />
 
-          <p className="text-2xl font-semibold mt-4">Daftar Menu</p>
-          <p>
-            Berikut daftar makanan dan minuman yang terdapat pada{" "}
-            {props.franchise.name}
-          </p>
+          <div className="mt-4 space-y-2">
+            <p className="text-2xl font-semibold">Daftar Menu</p>
+            <p className="text-muted-foreground">
+              Berikut daftar makanan dan minuman yang terdapat pada{" "}
+              {props.franchise.name}
+            </p>
+          </div>
 
           <div className="flex justify-between items-center mt-8">
             <Tabs
@@ -111,7 +113,7 @@ export default function Page(
               </TabsList>
             </Tabs>
 
-            <Button asChild>
+            <Button asChild variant={"outline"}>
               <Link href="/admin/dashboard/menu/create">
                 <Plus className="w-4 h-4 mr-2" />
                 Tambah menu
@@ -119,64 +121,66 @@ export default function Page(
             </Button>
           </div>
 
-          <Table className="mt-4">
-            <TableHeader>
-              <TableRow>
-                <TableHead>No</TableHead>
-                <TableHead>Nama</TableHead>
-                <TableHead>Deskripsi</TableHead>
-                <TableHead>Ketersediaan</TableHead>
-                <TableHead>Aksi</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {props.menus.map((menu, index) => (
-                <TableRow className={cn(menu.availability || "bg-muted")}>
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell
-                    className={cn(menu.availability || "line-through")}
-                  >
-                    {menu.name}
-                  </TableCell>
-                  <TableCell
-                    className={cn(menu.availability || "line-through")}
-                  >
-                    {menu.description}
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      size={"sm"}
-                      variant={menu.availability ? "secondary" : "ghost"}
-                      onClick={() => {
-                        updateMenuAvailabilityForm.setData({
-                          availability: !menu.availability,
-                        });
-                        setSelectedMenu(menu);
-                        setIsDialogUpdateMenuAvailabilityOpen(true);
-                      }}
-                    >
-                      {menu.availability ? "Tersedia" : "Tidak tersedia"}
-                    </Button>
-                  </TableCell>
-                  <TableCell className="flex gap-1">
-                    <Button size={"icon"} variant={"secondary"}>
-                      <Edit2 className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      size={"icon"}
-                      variant={"destructive"}
-                      onClick={() => {
-                        setSelectedMenu(menu);
-                        setIsDialogDeleteMenuOpen(true);
-                      }}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </TableCell>
+          <Card className="mt-4 overflow-hidden">
+            <Table>
+              <TableHeader className="bg-muted/70">
+                <TableRow>
+                  <TableHead>No</TableHead>
+                  <TableHead>Nama</TableHead>
+                  <TableHead>Deskripsi</TableHead>
+                  <TableHead>Ketersediaan</TableHead>
+                  <TableHead>Aksi</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {props.menus.map((menu, index) => (
+                  <TableRow className={cn(menu.availability || "bg-muted")}>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell
+                      className={cn(menu.availability || "line-through")}
+                    >
+                      {menu.name}
+                    </TableCell>
+                    <TableCell
+                      className={cn(menu.availability || "line-through")}
+                    >
+                      {menu.description}
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        size={"sm"}
+                        variant={menu.availability ? "secondary" : "ghost"}
+                        onClick={() => {
+                          updateMenuAvailabilityForm.setData({
+                            availability: !menu.availability,
+                          });
+                          setSelectedMenu(menu);
+                          setIsDialogUpdateMenuAvailabilityOpen(true);
+                        }}
+                      >
+                        {menu.availability ? "Tersedia" : "Tidak tersedia"}
+                      </Button>
+                    </TableCell>
+                    <TableCell className="flex gap-1">
+                      <Button size={"icon"} variant={"secondary"}>
+                        <Edit2 className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        size={"icon"}
+                        variant={"destructive"}
+                        onClick={() => {
+                          setSelectedMenu(menu);
+                          setIsDialogDeleteMenuOpen(true);
+                        }}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Card>
         </div>
       </DashboardAdminLayout>
 

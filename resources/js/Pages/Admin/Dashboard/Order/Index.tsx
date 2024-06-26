@@ -1,5 +1,6 @@
 import BreadcrumbComponent from "@/Components/Breadcrumb";
 import { Button } from "@/Components/ui/button";
+import { Card } from "@/Components/ui/card";
 import {
   Table,
   TableBody,
@@ -31,58 +32,58 @@ export default function Page(
               { title: "Daftar pesanan" },
             ]}
           />
-          <div className="flex items-center gap-4 justify-between">
-            <div>
-              <p className={"font-semibold text-2xl mt-4"}>Daftar Pesanan</p>
-              <p>
-                Berikut adalah daftar pesanan yang memerlukan penyelesaian
-                segera untuk memastikan kelancaran dan kepuasan pelanggan.
-              </p>
-            </div>
-
-            <div className="flex items-center gap-1">
-              <Button size={"icon"} variant={"outline"} asChild>
-                <Link href={route("admin.dashboard.order.paymentVerification")}>
-                  <ReceiptText className="w-4 h-4" />
-                </Link>
-              </Button>
-              <Button variant={"outline"}>
-                <Plus className="w-4 h-4 mr-2" />
-                Tambah
-              </Button>
-            </div>
+          <div className="mt-4 space-y-2">
+            <p className="font-semibold text-2xl">Daftar Pesanan</p>
+            <p className="text-muted-foreground">
+              Berikut adalah daftar pesanan yang memerlukan penyelesaian segera
+              untuk memastikan kelancaran dan kepuasan pelanggan.
+            </p>
           </div>
 
-          <Table className="mt-8">
-            <TableHeader>
-              <TableRow>
-                <TableHead>No</TableHead>
-                <TableHead>Nama pemesan</TableHead>
-                <TableHead>Jumlah</TableHead>
-                <TableHead>Aksi</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {props.orders.map((order, index) => (
-                <TableRow key={"order-item-" + index}>
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell>{order.user.name}</TableCell>
-                  <TableCell>{order.order_items_count}</TableCell>
-                  <TableCell className={"flex items-center gap-1"}>
-                    <Button variant={"outline"} size={"icon"} asChild>
-                      <Link
-                        href={route("admin.dashboard.order.detail", {
-                          orderId: order.id,
-                        })}
-                      >
-                        <Eye className={"w-4 h-4"} />
-                      </Link>
-                    </Button>
-                  </TableCell>
+          <div className="mt-8 flex justify-end gap-1">
+            <Button variant={"outline"} asChild>
+              <Link href={route("admin.dashboard.order.paymentVerification")}>
+                <ReceiptText className="w-4 h-4 mr-2" />
+                Verifikasi pembayaran
+              </Link>
+            </Button>
+            <Button variant={"outline"}>
+              <Plus className="w-4 h-4 mr-2" />
+              Tambah pesanan
+            </Button>
+          </div>
+          <Card className="mt-4">
+            <Table>
+              <TableHeader className="bg-muted/70">
+                <TableRow>
+                  <TableHead>No</TableHead>
+                  <TableHead>Nama pemesan</TableHead>
+                  <TableHead>Jumlah</TableHead>
+                  <TableHead>Aksi</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {props.orders.map((order, index) => (
+                  <TableRow key={"order-item-" + index}>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{order.user.name}</TableCell>
+                    <TableCell>{order.order_items_count}</TableCell>
+                    <TableCell className={"flex items-center gap-1"}>
+                      <Button variant={"outline"} size={"icon"} asChild>
+                        <Link
+                          href={route("admin.dashboard.order.detail", {
+                            orderId: order.id,
+                          })}
+                        >
+                          <Eye className={"w-4 h-4"} />
+                        </Link>
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Card>
         </div>
       </DashboardAdminLayout>
     </>

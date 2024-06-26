@@ -37,6 +37,12 @@ Route::middleware(AdminAuthMiddleware::class)->prefix('admin')->group(function (
     Route::put('profile', [AdminProfileController::class, 'update']);
 
     // manage admin
-    Route::get('manage-admin', [AdminManageController::class, 'show'])->name('admin.dashboard.manageAdmin');
+    Route::get('manage-admin', [AdminManageController::class, 'show'])
+      ->name('admin.dashboard.manageAdmin');
+    Route::get('manage-admin/create', [AdminManageController::class, 'showCreate'])
+      ->name('admin.dashboard.manageAdmin.create');
+    Route::post('manage-admin/create', [AdminManageController::class, 'create']);
+    Route::delete('manage-admin/delete/{id}', [AdminManageController::class, 'delete'])
+      ->name('admin.dashboard.manageAdmin.delete');
   });
 });

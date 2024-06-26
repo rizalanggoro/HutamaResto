@@ -16,8 +16,8 @@ return new class extends Migration {
         });
 
         Schema::table('admin_franchise', function (Blueprint $table) {
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('franchise_id')->references('id')->on('franchises');
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreign('franchise_id')->references('id')->on('franchises')->cascadeOnDelete();
         });
     }
 
