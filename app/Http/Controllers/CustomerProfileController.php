@@ -18,6 +18,7 @@ class CustomerProfileController extends Controller {
 
         $user = Auth::user();
         $user->name = $request->name;
+        $user->address = $request->address;
         $user->save();
 
         return back();

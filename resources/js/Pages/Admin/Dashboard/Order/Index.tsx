@@ -52,7 +52,7 @@ export default function Page(
               Tambah pesanan
             </Button>
           </div>
-          <Card className="mt-4">
+          <Card className="mt-4 overflow-hidden">
             <Table>
               <TableHeader className="bg-muted/70">
                 <TableRow>
@@ -62,26 +62,37 @@ export default function Page(
                   <TableHead>Aksi</TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody>
-                {props.orders.map((order, index) => (
-                  <TableRow key={"order-item-" + index}>
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>{order.user.name}</TableCell>
-                    <TableCell>{order.order_items_count}</TableCell>
-                    <TableCell className={"flex items-center gap-1"}>
-                      <Button variant={"outline"} size={"icon"} asChild>
-                        <Link
-                          href={route("admin.dashboard.order.detail", {
-                            orderId: order.id,
-                          })}
-                        >
-                          <Eye className={"w-4 h-4"} />
-                        </Link>
-                      </Button>
+              {props.orders.length === 0 && (
+                <TableBody>
+                  <TableRow>
+                    <TableCell colSpan={4} className="text-center">
+                      Tidak ada data
                     </TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
+                </TableBody>
+              )}
+              {props.orders.length > 0 && (
+                <TableBody>
+                  {props.orders.map((order, index) => (
+                    <TableRow key={"order-item-" + index}>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>{order.user.name}</TableCell>
+                      <TableCell>{order.order_items_count}</TableCell>
+                      <TableCell className={"flex items-center gap-1"}>
+                        <Button variant={"outline"} size={"icon"} asChild>
+                          <Link
+                            href={route("admin.dashboard.order.detail", {
+                              orderId: order.id,
+                            })}
+                          >
+                            <Eye className={"w-4 h-4"} />
+                          </Link>
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              )}
             </Table>
           </Card>
         </div>
