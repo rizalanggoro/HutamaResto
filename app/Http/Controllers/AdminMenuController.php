@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Storage;
 
 class AdminMenuController extends Controller {
   public function show(Request $request) {
@@ -24,32 +25,43 @@ class AdminMenuController extends Controller {
   }
 
   public function showCreate() {
-    $franchise = Auth::user()->franchise()->first();
-    return Inertia::render('Admin/Dashboard/Menu/Create', [
-      'idFranchise' => $franchise->id,
-    ]);
+    $franchise = Auth::user()->franchise()->firstOrFail();
+
+    return Inertia::render(
+      'Admin/Dashboard/Menu/Create',
+      compact('franchise')
+    );
   }
 
   public function create(Request $request) {
     $credentials = $request->validate([
-      'idFranchise' => ['required', 'numeric'],
+      'image' => ['required'],
       'name' => ['required'],
       'description' => ['required'],
       'availability' => ['boolean', 'required'],
       'type' => ['required'],
+      'price' => ['required', 'numeric'],
     ], [
+      'image.required' => 'Gambar menu tidak boleh kosong!',
+      'image.file' => 'Gambar menu tidak boleh kosong!',
       'name.required' => 'Nama menu tidak boleh kosong!',
       'description.required' => 'Deskripsi menu tidak boleh kosong!',
       'availability.required' => 'Ketersediaan menu tidak boleh kosong!',
       'type.required' => 'Tipe menu tidak boleh kosong!',
+      'price.required' => 'Harga menu tidak boleh kosong!',
+      'price.number' => 'Harga menu tidak boleh kosong!',
     ]);
 
+    $franchise = Auth::user()->franchise()->firstOrFail();
+
     if (Menu::create([
-      'id_franchise' => $credentials['idFranchise'],
+      'franchise_id' => $franchise->id,
+      'image' => Storage::disk('public')->put('menus', $request->file('image')),
       'name' => $credentials['name'],
       'description' => $credentials['description'],
       'availability' => $credentials['availability'],
       'type' => $credentials['type'],
+      'price' => $credentials['price'],
     ])) {
       return redirect()->route('admin.dashboard.menu');
     }

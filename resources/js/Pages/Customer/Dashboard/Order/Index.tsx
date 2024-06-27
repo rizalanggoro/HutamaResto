@@ -47,7 +47,7 @@ import { Franchise, Order } from "@/types/models";
 import { orderStatuses } from "@/types/order-status";
 import { Head, Link, router, useForm } from "@inertiajs/react";
 import { Eye, Loader2, PenLine, Trash2, Upload } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type OrderType = Order & { franchise: Franchise };
 
@@ -92,6 +92,12 @@ export default function Page(
         },
       },
     );
+
+  useEffect(() => {
+    const interval = setInterval(() => router.reload(), 5000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <>

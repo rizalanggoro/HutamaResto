@@ -19,6 +19,8 @@ export type Menu = {
   description: string;
   availability: number;
   type: "food" | "beverage";
+  price: number;
+  image: string | undefined;
 };
 
 export type Order = {

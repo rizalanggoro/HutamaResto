@@ -14,6 +14,8 @@ class Menu extends Model {
         'description',
         'availability',
         'type',
+        'price',
+        'image',
     ];
 
     public function orderItems() {

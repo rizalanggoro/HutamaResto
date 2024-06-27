@@ -8,23 +8,25 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/Components/ui/alert-dialog";
+import { Badge } from "@/Components/ui/badge";
 import { Button } from "@/Components/ui/button";
-import { Card } from "@/Components/ui/card";
+import { Card, CardFooter, CardHeader } from "@/Components/ui/card";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/Components/ui/table";
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/Components/ui/select";
 import { Tabs, TabsList, TabsTrigger } from "@/Components/ui/tabs";
 import DashboardAdminLayout from "@/Layouts/DashboardAdmin";
 import { cn } from "@/lib/utils";
 import { PageProps } from "@/types";
 import { Franchise, Menu } from "@/types/models";
 import { Head, Link, router, useForm } from "@inertiajs/react";
-import { Edit2, Loader2, Plus, Trash2 } from "lucide-react";
+import { Edit2, Image, Loader2, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 
 type CustomMenu = Menu & { order_items_count: number };
@@ -74,7 +76,7 @@ export default function Page(
 
   return (
     <>
-      <Head title="Daftar menu" />
+      <Head title="Daftar Menu" />
       <DashboardAdminLayout>
         <div>
           <BreadcrumbComponent
@@ -97,7 +99,7 @@ export default function Page(
             </p>
           </div>
 
-          <div className="flex justify-between items-center mt-8">
+          <div className="flex items-center mt-8 gap-2">
             <Tabs
               defaultValue={"all"}
               onValueChange={(e) => {
@@ -112,6 +114,21 @@ export default function Page(
                 <TabsTrigger value="beverage">Minuman</TabsTrigger>
               </TabsList>
             </Tabs>
+            <Select defaultValue="all">
+              <SelectTrigger className="w-48">
+                <SelectValue placeholder="Theme" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Ketersediaan</SelectLabel>
+                  <SelectItem value="all">Semua</SelectItem>
+                  <SelectItem value="available">Tersedia</SelectItem>
+                  <SelectItem value="unavailable">Tidak tersedia</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+
+            <div className="flex-1"></div>
 
             <Button asChild variant={"outline"}>
               <Link href="/admin/dashboard/menu/create">
@@ -121,11 +138,67 @@ export default function Page(
             </Button>
           </div>
 
-          <Card className="mt-4 overflow-hidden">
+          <div className="grid grid-cols-3 gap-2 mt-4">
+            {props.menus.map((menu, index) => (
+              <Card key={"menu-item-" + index}>
+                <CardHeader className="grid grid-cols-1 gap-2 p-4">
+                  {index % 2 === 0 ? (
+                    <img
+                      src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                      className="w-full h-48 object-cover rounded"
+                    />
+                  ) : (
+                    <div className="w-full h-48 object-cover rounded border border-dashed flex items-center justify-center">
+                      <Image className="text-muted-foreground" />
+                    </div>
+                  )}
+
+                  <div>
+                    <Badge
+                      className="cursor-pointer"
+                      onClick={() => {
+                        setSelectedMenu(menu);
+                        setIsDialogUpdateMenuAvailabilityOpen(true);
+                      }}
+                      variant={menu.availability === 0 ? "outline" : "default"}
+                    >
+                      {menu.availability === 0 ? "Tidak tersedia" : "Tersedia"}
+                    </Badge>
+                    <p
+                      className={cn(
+                        "font-semibold mt-2",
+                        menu.availability === 0 && "line-through",
+                      )}
+                    >
+                      {menu.name}
+                    </p>
+                    <p
+                      className={cn(
+                        "text-muted-foreground text-sm",
+                        menu.availability === 0 && "line-through",
+                      )}
+                    >
+                      {menu.description}
+                    </p>
+                  </div>
+                </CardHeader>
+                <CardFooter className="flex justify-end gap-1 px-4 pb-4">
+                  <Button variant={"outline"} className="flex-1">
+                    <Edit2 className="w-4 h-4 mr-2" />
+                    Ubah
+                  </Button>
+                  <Button variant={"destructive"} size={"icon"}>
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+
+          {/* <Card className="mt-4 overflow-hidden">
             <Table>
               <TableHeader className="bg-muted/70">
                 <TableRow>
-                  <TableHead>No</TableHead>
                   <TableHead>Nama</TableHead>
                   <TableHead>Deskripsi</TableHead>
                   <TableHead>Ketersediaan</TableHead>
@@ -134,8 +207,10 @@ export default function Page(
               </TableHeader>
               <TableBody>
                 {props.menus.map((menu, index) => (
-                  <TableRow className={cn(menu.availability || "bg-muted")}>
-                    <TableCell>{index + 1}</TableCell>
+                  <TableRow
+                    className={cn(menu.availability || "bg-muted")}
+                    key={"menu-item-" + index}
+                  >
                     <TableCell
                       className={cn(menu.availability || "line-through")}
                     >
@@ -180,7 +255,7 @@ export default function Page(
                 ))}
               </TableBody>
             </Table>
-          </Card>
+          </Card> */}
         </div>
       </DashboardAdminLayout>
 

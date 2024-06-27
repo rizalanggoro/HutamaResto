@@ -2,9 +2,18 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
 import { Button } from "@/Components/ui/button";
 import { ScrollArea } from "@/Components/ui/scroll-area";
 import { Separator } from "@/Components/ui/separator";
+import { useTheme } from "@/Providers/Theme";
 import { User } from "@/types/models";
 import { Link, usePage } from "@inertiajs/react";
-import { Flag, Home, ListChecks, LogOut, UserRound } from "lucide-react";
+import {
+  Flag,
+  Home,
+  ListChecks,
+  LogOut,
+  Moon,
+  Sun,
+  UserRound,
+} from "lucide-react";
 import { PropsWithChildren } from "react";
 
 const menus = [
@@ -36,16 +45,33 @@ export default function DashboardCustomerLayout({
   const {
     auth: { user },
   } = usePage<{ auth: { user: User | null } }>().props;
+  const { theme, setTheme } = useTheme();
+
+  const onClickButtonSwitchTheme = () => {
+    setTheme(theme === "light" ? "dark" : "light");
+  };
 
   return (
     <>
       {/* <NavbarComponent variant="xl" /> */}
       <div className="h-screen flex">
         <div className="flex-1 h-screen flex flex-col">
-          <div className="h-16 flex items-center px-4">
+          <div className="h-16 flex items-center px-4 justify-between">
             <p className="font-semibold text-lg text-transparent bg-clip-text bg-gradient-to-r to-teal-600 from-primary">
               HutamaResto
             </p>
+
+            <Button
+              variant={"ghost"}
+              size={"icon"}
+              onClick={onClickButtonSwitchTheme}
+            >
+              {theme === "light" ? (
+                <Moon className={"w-4 h-4"} />
+              ) : (
+                <Sun className={"w-4 h-4"} />
+              )}
+            </Button>
           </div>
           <Separator orientation="horizontal" />
           <ScrollArea className="w-full flex-1">

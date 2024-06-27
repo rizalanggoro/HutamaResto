@@ -6,8 +6,9 @@ import { Label } from "@/Components/ui/label";
 import DashboardAdminLayout from "@/Layouts/DashboardAdmin";
 import { PageProps } from "@/types";
 import { Franchise } from "@/types/models";
-import { Head, Link, useForm } from "@inertiajs/react";
+import { Head, Link, router, useForm } from "@inertiajs/react";
 import { ChevronRight, Loader2 } from "lucide-react";
+import { useEffect } from "react";
 
 export default function Page(
   props: PageProps<{
@@ -17,6 +18,11 @@ export default function Page(
   }>,
 ) {
   const formUpdateOpen = useForm();
+
+  useEffect(() => {
+    const interval = setInterval(() => router.reload(), 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <>

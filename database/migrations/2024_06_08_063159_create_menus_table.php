@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->boolean('availability');
             $table->enum('type', ['food', 'beverage']);
             $table->bigInteger('price');
+            $table->string('image')->nullable();
             $table->timestamps();
         });
 
