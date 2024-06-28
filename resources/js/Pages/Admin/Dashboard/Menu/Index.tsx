@@ -26,18 +26,17 @@ import { cn } from "@/lib/utils";
 import { PageProps } from "@/types";
 import { Franchise, Menu } from "@/types/models";
 import { Head, Link, router, useForm } from "@inertiajs/react";
-import { Edit2, Image, Loader2, Plus, Trash2 } from "lucide-react";
+import { Edit2, Loader2, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
-
-type CustomMenu = Menu & { order_items_count: number };
+import { FormattedNumber } from "react-intl";
 
 export default function Page(
   props: PageProps<{
     franchise: Franchise;
-    menus: CustomMenu[];
+    menus: Menu[];
   }>,
 ) {
-  const [selectedMenu, setSelectedMenu] = useState<CustomMenu>();
+  const [selectedMenu, setSelectedMenu] = useState<Menu>();
 
   const updateMenuAvailabilityForm = useForm({ availability: false });
   const [
@@ -95,7 +94,7 @@ export default function Page(
             <p className="text-2xl font-semibold">Daftar Menu</p>
             <p className="text-muted-foreground">
               Berikut daftar makanan dan minuman yang terdapat pada{" "}
-              {props.franchise.name}
+              <span className="font-medium">{props.franchise.name}</span>
             </p>
           </div>
 
@@ -151,49 +150,60 @@ export default function Page(
 
           <div className="grid grid-cols-3 gap-2 mt-4">
             {props.menus.map((menu, index) => (
-              <Card key={"menu-item-" + index}>
+              <Card key={"menu-item-" + index} className="flex flex-col">
                 <CardHeader className="grid grid-cols-1 gap-2 p-4">
-                  {index % 2 === 0 ? (
-                    <img
-                      src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                      className="w-full h-48 object-cover rounded"
-                    />
-                  ) : (
-                    <div className="w-full h-48 object-cover rounded border border-dashed flex items-center justify-center">
-                      <Image className="text-muted-foreground" />
-                    </div>
-                  )}
+                  <img
+                    src={menu.image}
+                    className="w-full h-48 object-cover rounded"
+                  />
 
                   <div>
-                    <Badge
-                      className="cursor-pointer"
-                      onClick={() => {
-                        setSelectedMenu(menu);
-                        setIsDialogUpdateMenuAvailabilityOpen(true);
-                      }}
-                      variant={menu.availability === 0 ? "outline" : "default"}
-                    >
-                      {menu.availability === 0 ? "Tidak tersedia" : "Tersedia"}
-                    </Badge>
-                    <p
-                      className={cn(
-                        "font-semibold mt-2",
-                        menu.availability === 0 && "line-through",
-                      )}
-                    >
-                      {menu.name}
-                    </p>
-                    <p
-                      className={cn(
-                        "text-muted-foreground text-sm",
-                        menu.availability === 0 && "line-through",
-                      )}
-                    >
-                      {menu.description}
-                    </p>
+                    <div className="flex items-center justify-between">
+                      <p className="font-medium text-sm">
+                        <FormattedNumber
+                          value={menu.price}
+                          style="currency"
+                          currency="IDR"
+                        />
+                      </p>
+
+                      <Badge
+                        className="cursor-pointer"
+                        onClick={() => {
+                          setSelectedMenu(menu);
+                          setIsDialogUpdateMenuAvailabilityOpen(true);
+                        }}
+                        variant={
+                          menu.availability === 0 ? "outline" : "default"
+                        }
+                      >
+                        {menu.availability === 0
+                          ? "Tidak tersedia"
+                          : "Tersedia"}
+                      </Badge>
+                    </div>
+
+                    <div className="mt-2 space-y-1">
+                      <p
+                        className={cn(
+                          "font-semibold",
+                          menu.availability === 0 && "line-through",
+                        )}
+                      >
+                        {menu.name}
+                      </p>
+                      <p
+                        className={cn(
+                          "text-muted-foreground text-sm",
+                          menu.availability === 0 && "line-through",
+                        )}
+                      >
+                        {menu.description}
+                      </p>
+                    </div>
                   </div>
                 </CardHeader>
-                <CardFooter className="flex justify-end gap-1 px-4 pb-4">
+                <CardFooter className="flex justify-end gap-1 px-4 pb-4 flex-1 items-end">
                   <Button variant={"outline"} className="flex-1">
                     <Edit2 className="w-4 h-4 mr-2" />
                     Ubah
@@ -320,39 +330,27 @@ export default function Page(
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Konfirmasi Hapus Menu</AlertDialogTitle>
-            {(selectedMenu?.order_items_count ?? 0) > 0 ? (
-              <AlertDialogDescription>
-                Menu yang akan Anda hapus masih terikat dengan{" "}
-                {selectedMenu?.order_items_count ?? 0} pesanan. Silahkan
-                selesaikan pesanan tersebut terlebih dahulu
-              </AlertDialogDescription>
-            ) : (
-              <AlertDialogDescription>
-                Apakah Anda yakin akan menghapus menu{" "}
-                <span className="font-semibold">
-                  {selectedMenu?.name ?? "-"}
-                </span>{" "}
-                dari database? Tindakan Anda bersifat permanen dan tidak dapat
-                dipulihkan
-              </AlertDialogDescription>
-            )}
+            <AlertDialogDescription>
+              Apakah Anda yakin akan menghapus menu{" "}
+              <span className="font-semibold">{selectedMenu?.name ?? "-"}</span>{" "}
+              dari database? Tindakan Anda bersifat permanen dan tidak dapat
+              dipulihkan
+            </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel disabled={deleteMenuForm.processing}>
               Batal
             </AlertDialogCancel>
-            {selectedMenu?.order_items_count === 0 && (
-              <Button
-                disabled={deleteMenuForm.processing}
-                variant={"destructive"}
-                onClick={onClickButtonDeleteMenu}
-              >
-                {deleteMenuForm.processing && (
-                  <Loader2 className="animate-spin mr-2 w-4 h-4" />
-                )}
-                Hapus
-              </Button>
-            )}
+            <Button
+              disabled={deleteMenuForm.processing}
+              variant={"destructive"}
+              onClick={onClickButtonDeleteMenu}
+            >
+              {deleteMenuForm.processing && (
+                <Loader2 className="animate-spin mr-2 w-4 h-4" />
+              )}
+              Hapus
+            </Button>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

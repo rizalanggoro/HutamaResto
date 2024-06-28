@@ -40,11 +40,11 @@ export default function NavbarComponent({
 
   return (
     <>
-      <header className="bg-background/70 border-b backdrop-blur fixed w-full top-0 h-16">
+      <header className="bg-background/70 border-b backdrop-blur fixed w-full top-0 h-16 z-50">
         <nav
           className={cn(
             "h-16 items-center flex mx-auto px-4 justify-between",
-            maxW[variant]
+            maxW[variant],
           )}
         >
           <Button

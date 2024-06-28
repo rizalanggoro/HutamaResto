@@ -9,6 +9,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Franchise extends Model {
     use HasFactory;
 
+    protected $fillable = [
+        'name', 'address', 'is_open',
+    ];
+
     public function menus(): HasMany {
         return $this->hasMany(Menu::class, 'franchise_id');
     }

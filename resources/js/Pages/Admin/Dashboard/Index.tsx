@@ -32,7 +32,8 @@ export default function Page(
           </p>
           <p className="text-muted-foreground mt-2">
             Berikut adalah beberapa ringkasan singkat mengenai berbagai aspek
-            pengelolaan restoran yang Anda kelola: {props.franchise.name}
+            pengelolaan restoran yang Anda kelola:{" "}
+            <span className="font-medium">{props.franchise.name}</span>
           </p>
 
           <div className="flex gap-2 mt-8">
@@ -43,7 +44,7 @@ export default function Page(
                   <Label>Profile restoran Anda</Label>
                   <div className="flex items-center gap-4">
                     <img
-                      src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                      src={props.franchise.image}
                       className="w-32 object-cover h-24 rounded"
                     />
                     <div>

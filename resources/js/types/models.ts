@@ -10,6 +10,7 @@ export type Franchise = {
   name: string;
   address: string;
   is_open: number;
+  image: string;
 };
 
 export type Menu = {

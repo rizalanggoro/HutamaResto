@@ -4,29 +4,25 @@ import { Button } from "@/Components/ui/button";
 import {
   Card,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/Components/ui/card";
 import { Separator } from "@/Components/ui/separator";
 import { PageProps } from "@/types";
-import { Franchise, User } from "@/types/models";
-import { Head, Link } from "@inertiajs/react";
-import { LandPlot, Percent, Utensils } from "lucide-react";
+import { Franchise } from "@/types/models";
+import { Head } from "@inertiajs/react";
+import { ChevronRight, LandPlot, Percent, Utensils } from "lucide-react";
 
 export default function LandingPage(
   props: PageProps<{
     franchises: Franchise[];
-    user?: User;
   }>,
 ) {
   return (
     <>
-      <Head>
-        <title>Halaman utama</title>
-      </Head>
-
+      <Head title="Halaman Utama" />
       <NavbarComponent />
-
       <ContainerComponent>
         <main className="pt-16 pb-8">
           <section className="mt-32">
@@ -71,17 +67,26 @@ export default function LandingPage(
               {props.franchises.map((franchise, index) => (
                 <Card
                   key={"card-item-franchise-" + index}
-                  className="overflow-hidden"
+                  className="overflow-hidden group"
                 >
-                  <img
-                    src="https://images.unsplash.com/photo-1632181933699-d45280e5c7de?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                    className="inline-block h-48 object-cover w-full"
-                  />
+                  <div className="h-48 w-full overflow-hidden">
+                    <img
+                      src={franchise.image}
+                      className="inline-block h-48 object-cover w-full group-hover:scale-110 duration-300"
+                    />
+                  </div>
 
                   <CardHeader>
-                    <CardTitle>{franchise.name}</CardTitle>
+                    <CardTitle className="text-lg">{franchise.name}</CardTitle>
                     <CardDescription>{franchise.address}</CardDescription>
                   </CardHeader>
+
+                  <CardFooter className="flex items-center justify-end">
+                    <Button variant={"link"} className="px-0">
+                      Lihat detail
+                      <ChevronRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </CardFooter>
                 </Card>
               ))}
             </div>
@@ -108,30 +113,6 @@ export default function LandingPage(
 
           <Separator className="mt-8" />
         </main>
-
-        <Button asChild variant={"link"}>
-          <Link href={route("login")}>Login customer</Link>
-        </Button>
-        <Button asChild variant={"link"}>
-          <Link href={route("admin.login")}>Login admin</Link>
-        </Button>
-        <Button asChild variant={"link"}>
-          <Link href={route("superadmin.login")}>Login super admin</Link>
-        </Button>
-
-        <br />
-
-        <Button asChild variant={"link"}>
-          <Link href={route("dashboard")}>Dashboard customer</Link>
-        </Button>
-        <Button asChild variant={"link"}>
-          <Link href={route("admin.dashboard")}>Dashboard admin</Link>
-        </Button>
-        <Button asChild variant={"link"}>
-          <Link href={route("superadmin.dashboard")}>
-            Dashboard super admin
-          </Link>
-        </Button>
       </ContainerComponent>
     </>
   );

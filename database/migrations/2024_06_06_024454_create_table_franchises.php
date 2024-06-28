@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->string('name');
             $table->string('address');
             $table->boolean('is_open')->default(false);
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

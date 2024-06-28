@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('franchise_id');
             $table->string('name');
             $table->string('description');
-            $table->boolean('availability');
+            $table->boolean('availability')->default(true);
             $table->enum('type', ['food', 'beverage']);
             $table->bigInteger('price');
             $table->string('image')->nullable();
