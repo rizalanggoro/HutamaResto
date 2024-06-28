@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/Providers/Theme";
 import { createInertiaApp } from "@inertiajs/react";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { createRoot } from "react-dom/client";
+import { IntlProvider } from "react-intl";
 import { Toaster } from "./Components/ui/toaster";
 import { TooltipProvider } from "./Components/ui/tooltip";
 
@@ -15,7 +16,7 @@ createInertiaApp({
   resolve: (name) =>
     resolvePageComponent(
       `./Pages/${name}.tsx`,
-      import.meta.glob("./Pages/**/*.tsx")
+      import.meta.glob("./Pages/**/*.tsx"),
     ),
   setup({ el, App, props }) {
     const root = createRoot(el);
@@ -23,10 +24,12 @@ createInertiaApp({
     root.render(
       <ThemeProvider defaultTheme={"system"}>
         <TooltipProvider>
-          <App {...props} />
-          <Toaster />
+          <IntlProvider locale="id">
+            <App {...props} />
+            <Toaster />
+          </IntlProvider>
         </TooltipProvider>
-      </ThemeProvider>
+      </ThemeProvider>,
     );
   },
   progress: {

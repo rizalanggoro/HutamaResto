@@ -41,13 +41,14 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/Components/ui/tooltip";
+import useServerPooling from "@/Hooks/server-pooling";
 import DashboardCustomerLayout from "@/Layouts/DashboardCustomer";
 import { PageProps } from "@/types";
 import { Franchise, Order } from "@/types/models";
 import { orderStatuses } from "@/types/order-status";
 import { Head, Link, router, useForm } from "@inertiajs/react";
 import { Eye, Loader2, PenLine, Trash2, Upload } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 type OrderType = Order & { franchise: Franchise };
 
@@ -56,6 +57,8 @@ export default function Page(
     orders: OrderType[];
   }>,
 ) {
+  useServerPooling();
+
   const [selectedOrder, setSelectedOrder] = useState<OrderType>();
   const [isDialogUploadReceiptOpen, setIsDialogUploadReceiptOpen] =
     useState(false);
@@ -92,12 +95,6 @@ export default function Page(
         },
       },
     );
-
-  useEffect(() => {
-    const interval = setInterval(() => router.reload(), 5000);
-
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <>

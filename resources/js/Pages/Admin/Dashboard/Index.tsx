@@ -3,12 +3,12 @@ import { Badge } from "@/Components/ui/badge";
 import { Button } from "@/Components/ui/button";
 import { Card, CardFooter, CardHeader, CardTitle } from "@/Components/ui/card";
 import { Label } from "@/Components/ui/label";
+import useServerPooling from "@/Hooks/server-pooling";
 import DashboardAdminLayout from "@/Layouts/DashboardAdmin";
 import { PageProps } from "@/types";
 import { Franchise } from "@/types/models";
-import { Head, Link, router, useForm } from "@inertiajs/react";
+import { Head, Link, useForm } from "@inertiajs/react";
 import { ChevronRight, Loader2 } from "lucide-react";
-import { useEffect } from "react";
 
 export default function Page(
   props: PageProps<{
@@ -17,12 +17,8 @@ export default function Page(
     orderProcessingCount: number;
   }>,
 ) {
+  useServerPooling();
   const formUpdateOpen = useForm();
-
-  useEffect(() => {
-    const interval = setInterval(() => router.reload(), 5000);
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <>

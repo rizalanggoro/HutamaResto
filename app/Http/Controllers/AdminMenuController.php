@@ -13,10 +13,17 @@ use Storage;
 class AdminMenuController extends Controller {
   public function show(Request $request) {
     $franchise = Auth::user()->franchise()->first();
-    $menus = $franchise->menus()->where(function (Builder $query) use ($request) {
-      $filter = $request->query('filter', 'all');
-      return $filter === 'all' ? $query : $query->whereType($filter);
-    })->withCount('orderItems')->get(); // perlu di update bagian ini, supaya cuma order yang aktif yang dapat mencegah penghapusan 
+    $menus = $franchise->menus()
+      ->where(function (Builder $query) use ($request) {
+        $type = $request->query('type', 'all');
+        return $type === 'all' ? $query : $query->whereType($type);
+      })
+      ->where(function (Builder $query) use ($request) {
+        $availability =  $request->query('availability', 'all');
+        return $availability === 'all' ? $query : $query->whereAvailability($availability === 'available');
+      })
+      ->withCount('orderItems')
+      ->get(); // perlu di update bagian ini, supaya cuma order yang aktif yang dapat mencegah penghapusan 
 
     return Inertia::render(
       'Admin/Dashboard/Menu/Index',

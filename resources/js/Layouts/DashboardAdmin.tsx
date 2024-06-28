@@ -10,7 +10,7 @@ import {
   Info,
   ListChecks,
   LogOut,
-  MessageSquareWarning,
+  MessageSquare,
   Moon,
   Sun,
   UserCog,
@@ -39,9 +39,9 @@ const menus: {
     icon: <UtensilsCrossed className="w-4 h-4" />,
   },
   {
-    title: "Daftar aduan",
+    title: "Daftar ulasan",
     route: "admin.dashboard.complaint",
-    icon: <MessageSquareWarning className="w-4 h-4" />,
+    icon: <MessageSquare className="w-4 h-4" />,
   },
   {
     title: "Profil restoran",

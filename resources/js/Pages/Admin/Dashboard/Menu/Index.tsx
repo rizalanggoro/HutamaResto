@@ -101,12 +101,14 @@ export default function Page(
 
           <div className="flex items-center mt-8 gap-2">
             <Tabs
-              defaultValue={"all"}
-              onValueChange={(e) => {
+              defaultValue={
+                (route().params.type as string | undefined) ?? "all"
+              }
+              onValueChange={(e) =>
                 router.reload({
-                  data: { filter: e === "all" ? undefined : e },
-                });
-              }}
+                  data: { type: e === "all" ? undefined : e },
+                })
+              }
             >
               <TabsList>
                 <TabsTrigger value="all">Semua</TabsTrigger>
@@ -114,7 +116,16 @@ export default function Page(
                 <TabsTrigger value="beverage">Minuman</TabsTrigger>
               </TabsList>
             </Tabs>
-            <Select defaultValue="all">
+            <Select
+              defaultValue={
+                (route().params.availability as string | undefined) ?? "all"
+              }
+              onValueChange={(e) =>
+                router.reload({
+                  data: { availability: e === "all" ? undefined : e },
+                })
+              }
+            >
               <SelectTrigger className="w-48">
                 <SelectValue placeholder="Theme" />
               </SelectTrigger>
@@ -187,7 +198,14 @@ export default function Page(
                     <Edit2 className="w-4 h-4 mr-2" />
                     Ubah
                   </Button>
-                  <Button variant={"destructive"} size={"icon"}>
+                  <Button
+                    variant={"destructive"}
+                    size={"icon"}
+                    onClick={() => {
+                      setSelectedMenu(menu);
+                      setIsDialogDeleteMenuOpen(true);
+                    }}
+                  >
                     <Trash2 className="w-4 h-4" />
                   </Button>
                 </CardFooter>

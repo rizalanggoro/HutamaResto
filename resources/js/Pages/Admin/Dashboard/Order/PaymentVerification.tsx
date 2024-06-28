@@ -9,6 +9,7 @@ import {
   AlertDialogTitle,
 } from "@/Components/ui/alert-dialog";
 import { Button } from "@/Components/ui/button";
+import { Card } from "@/Components/ui/card";
 import {
   Table,
   TableBody,
@@ -17,24 +18,31 @@ import {
   TableHeader,
   TableRow,
 } from "@/Components/ui/table";
+import useServerPooling from "@/Hooks/server-pooling";
 import DashboardAdminLayout from "@/Layouts/DashboardAdmin";
 import { PageProps } from "@/types";
-import { Order, User } from "@/types/models";
+import { Menu, Order, OrderItem, User } from "@/types/models";
 import { Head, router, useForm } from "@inertiajs/react";
 import { Check, Loader2 } from "lucide-react";
 import { useState } from "react";
+import { FormattedNumber } from "react-intl";
 
-type OrderItem = Order & { user: User };
+type CustomOrder = Order & {
+  user: User;
+  order_items: (OrderItem & { menu: Menu })[];
+};
 
 export default function Page(
   props: PageProps<{
-    orders: OrderItem[];
+    orders: CustomOrder[];
   }>,
 ) {
+  useServerPooling();
+
   const [isDialogConfirmPaymentOpen, setIsDialogConfirmPaymentOpen] =
     useState(false);
   const [selectedOrder, setSelectedOrder] = useState<
-    OrderItem & { number: number }
+    CustomOrder & { number: number }
   >();
 
   const formVerify = useForm();
@@ -56,9 +64,8 @@ export default function Page(
   return (
     <>
       <Head title="Verifikasi Pembayaran" />
-
       <DashboardAdminLayout>
-        <div className="py-8 pr-2">
+        <div>
           <BreadcrumbComponent
             items={[
               { title: "Halaman utama", href: route("admin.dashboard") },
@@ -66,45 +73,63 @@ export default function Page(
               { title: "Verifikasi pembayaran" },
             ]}
           />
-          <p className="text-2xl font-semibold mt-4">Verifikasi Pembayaran</p>
-          <p>
-            Berikut adalah beberapa pesanan yang telah masuk dan saat ini
-            menunggu konfirmasi pembayaran
-          </p>
+          <div className="mt-4 space-y-2">
+            <p className="text-2xl font-semibold">Verifikasi Pembayaran</p>
+            <p className="text-muted-foreground">
+              Berikut adalah beberapa pesanan yang telah masuk dan saat ini
+              menunggu konfirmasi pembayaran
+            </p>
+          </div>
 
-          <Table className="mt-8">
-            <TableHeader>
-              <TableRow>
-                <TableHead>No</TableHead>
-                <TableHead>Nama Pemesan</TableHead>
-                <TableHead>Total Harga</TableHead>
-                <TableHead>Bukti Pembayaran</TableHead>
-                <TableHead>Aksi</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {props.orders.map((order, index) => (
-                <TableRow key={"order-item-" + index}>
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell>{order.user.name}</TableCell>
-                  <TableCell>masih blom ada</TableCell>
-                  <TableCell>sama aja blom ada</TableCell>
-                  <TableCell>
-                    <Button
-                      variant={"outline"}
-                      size={"icon"}
-                      onClick={() => {
-                        setIsDialogConfirmPaymentOpen(true);
-                        setSelectedOrder({ ...order, number: index + 1 });
-                      }}
-                    >
-                      <Check className="w-4 h-4" />
-                    </Button>
-                  </TableCell>
+          <Card className="mt-8 overflow-hidden">
+            <Table>
+              <TableHeader className="bg-muted/70">
+                <TableRow>
+                  <TableHead>Nama Pemesan</TableHead>
+                  <TableHead>Total Menu</TableHead>
+                  <TableHead>Total Harga</TableHead>
+                  <TableHead>Bukti Pembayaran</TableHead>
+                  <TableHead>Aksi</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {props.orders.map((order, index) => (
+                  <TableRow key={"order-item-" + index}>
+                    <TableCell>{order.user.name}</TableCell>
+                    <TableCell>
+                      {order.order_items.reduce(
+                        (prev, curr) => prev + curr.count,
+                        0,
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <FormattedNumber
+                        value={order.order_items.reduce(
+                          (prev, curr) => prev + curr.menu.price,
+                          0,
+                        )}
+                        style="currency"
+                        currency="IDR"
+                      />
+                    </TableCell>
+                    <TableCell>sama aja blom ada</TableCell>
+                    <TableCell>
+                      <Button
+                        variant={"outline"}
+                        size={"icon"}
+                        onClick={() => {
+                          setIsDialogConfirmPaymentOpen(true);
+                          setSelectedOrder({ ...order, number: index + 1 });
+                        }}
+                      >
+                        <Check className="w-4 h-4" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Card>
         </div>
       </DashboardAdminLayout>
 

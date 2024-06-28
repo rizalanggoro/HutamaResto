@@ -30,7 +30,7 @@ class AdminOrderController extends Controller {
         $franchise = Auth::user()->franchise()->firstOrFail();
         $orders = $franchise->orders()
             ->whereStatus('waiting_payment_verification')
-            ->with('user')
+            ->with(['user', 'orderItems', 'orderItems.menu'])
             ->get();
 
         return Inertia::render(
