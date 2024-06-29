@@ -23,7 +23,10 @@ const maxW = {
   xl: "max-w-[1280px]",
 };
 
-const menus = [{ title: "Restoran" }, { title: "Menu" }, { title: "Promo" }];
+const menus = [
+  { title: "Restoran", route: "home.franchise" },
+  { title: "Menu", route: "home.menu" },
+];
 
 export default function NavbarComponent({
   variant = "lg",
@@ -54,19 +57,21 @@ export default function NavbarComponent({
             <Link href={route("home")}>HutamaResto</Link>
           </Button>
 
-          {route().current()?.indexOf("dashboard") === -1 && (
-            <div>
-              {menus.map((menu, index) => (
-                <Button
-                  key={"menu-item-" + index}
-                  variant={"link"}
-                  className="text-muted-foreground"
-                >
-                  {menu.title}
-                </Button>
-              ))}
-            </div>
-          )}
+          <div>
+            {menus.map((menu, index) => (
+              <Button
+                asChild
+                key={"menu-item-" + index}
+                variant={"link"}
+                className={cn(
+                  "text-muted-foreground",
+                  route().current(menu.route) && "text-primary",
+                )}
+              >
+                <Link href={route(menu.route)}>{menu.title}</Link>
+              </Button>
+            ))}
+          </div>
 
           <div className="flex items-center gap-2">
             <Button

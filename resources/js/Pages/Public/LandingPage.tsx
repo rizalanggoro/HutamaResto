@@ -1,18 +1,11 @@
 import ContainerComponent from "@/Components/Container";
+import FranchiseItemComponent from "@/Components/FranchiseItem";
 import NavbarComponent from "@/Components/Navbar";
 import { Button } from "@/Components/ui/button";
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/Components/ui/card";
-import { Separator } from "@/Components/ui/separator";
 import { PageProps } from "@/types";
 import { Franchise } from "@/types/models";
 import { Head } from "@inertiajs/react";
-import { ChevronRight, LandPlot, Percent, Utensils } from "lucide-react";
+import { LandPlot, Percent, Utensils } from "lucide-react";
 
 export default function LandingPage(
   props: PageProps<{
@@ -63,31 +56,12 @@ export default function LandingPage(
               yang siap menyambut Anda dengan kelezatan yang tak tertandingi.
             </p>
 
-            <div className="grid grid-cols-2 gap-2 mt-4">
+            <div className="grid grid-cols-2 gap-2 mt-8">
               {props.franchises.map((franchise, index) => (
-                <Card
-                  key={"card-item-franchise-" + index}
-                  className="overflow-hidden group"
-                >
-                  <div className="h-48 w-full overflow-hidden">
-                    <img
-                      src={franchise.image}
-                      className="inline-block h-48 object-cover w-full group-hover:scale-110 duration-300"
-                    />
-                  </div>
-
-                  <CardHeader>
-                    <CardTitle className="text-lg">{franchise.name}</CardTitle>
-                    <CardDescription>{franchise.address}</CardDescription>
-                  </CardHeader>
-
-                  <CardFooter className="flex items-center justify-end">
-                    <Button variant={"link"} className="px-0">
-                      Lihat detail
-                      <ChevronRight className="w-4 h-4 ml-2" />
-                    </Button>
-                  </CardFooter>
-                </Card>
+                <FranchiseItemComponent
+                  franchise={franchise}
+                  key={"franchise-item-" + index}
+                />
               ))}
             </div>
 
@@ -110,8 +84,6 @@ export default function LandingPage(
               banyak orang.
             </p>
           </section>
-
-          <Separator className="mt-8" />
         </main>
       </ContainerComponent>
     </>

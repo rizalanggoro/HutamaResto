@@ -1,12 +1,11 @@
 <?php
 
-use App\Http\Controllers\AdminComplaintController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AdminManageController;
 use App\Http\Controllers\AdminMenuController;
 use App\Http\Controllers\AdminOrderController;
-use App\Http\Controllers\AdminPaymentController;
 use App\Http\Controllers\AdminProfileController;
+use App\Http\Controllers\AdminReviewController;
 use App\Http\Middleware\AdminAuthMiddleware;
 use Illuminate\Support\Facades\Route;
 
@@ -32,16 +31,16 @@ Route::middleware(AdminAuthMiddleware::class)->prefix('admin')->group(function (
     Route::get('menu/create', [AdminMenuController::class, 'showCreate'])->name('admin.dashboard.menu.create');
     Route::post('menu/create', [AdminMenuController::class, 'create'])->name('admin.dashboard.menu.create');
 
-    // complaint
-    Route::get('complaint', [AdminComplaintController::class, 'show'])
-      ->name('admin.dashboard.complaint');
+    // review
+    Route::get('review', [AdminReviewController::class, 'show'])
+      ->name('admin.dashboard.review');
 
     // promo
     Route::get('promo', fn () => 'hello world')->name('admin.dashboard.promo');
 
     // profile
     Route::get('profile', [AdminProfileController::class, 'show'])->name('admin.dashboard.profile');
-    Route::put('profile', [AdminProfileController::class, 'update']);
+    Route::post('profile', [AdminProfileController::class, 'update']);
 
     // manage admin
     Route::get('manage-admin', [AdminManageController::class, 'show'])

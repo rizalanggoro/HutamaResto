@@ -1,11 +1,15 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\PublicController;
 use Illuminate\Support\Facades\Route;
 
 // all roles
-Route::get('/', [LandingPageController::class, 'show'])->name('home');
+Route::get('/', [PublicController::class, 'show'])->name('home');
+Route::get('franchise', [PublicController::class, 'showFranchise'])->name('home.franchise');
+Route::get('franchise/{id}', [PublicController::class, 'showFranchiseDetail'])
+  ->name('home.franchise.detail');
+Route::get('menu', [PublicController::class, 'showMenu'])->name('home.menu');
 
 // authentication
 Route::get('login', [AuthController::class, 'showCustomerLogin'])->name('login');

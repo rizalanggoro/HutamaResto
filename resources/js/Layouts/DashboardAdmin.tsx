@@ -1,4 +1,3 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
 import { Button } from "@/Components/ui/button";
 import { ScrollArea } from "@/Components/ui/scroll-area";
 import { Separator } from "@/Components/ui/separator";
@@ -40,7 +39,7 @@ const menus: {
   },
   {
     title: "Daftar ulasan",
-    route: "admin.dashboard.complaint",
+    route: "admin.dashboard.review",
     icon: <MessageSquare className="w-4 h-4" />,
   },
   {
@@ -110,10 +109,10 @@ export default function DashboardAdminLayout({ children }: PropsWithChildren) {
           <div className="p-4">
             {/* profile */}
             <div className="flex gap-4 items-center">
-              <Avatar>
+              {/* <Avatar>
                 <AvatarImage src="https://github.com/shadcn.png" />
                 <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
+              </Avatar> */}
               <div>
                 <p className="font-semibold">{user?.name}</p>
                 <p className="text-muted-foreground text-sm">{user?.email}</p>
