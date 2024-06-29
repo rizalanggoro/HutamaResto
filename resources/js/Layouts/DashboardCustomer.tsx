@@ -6,10 +6,10 @@ import { useTheme } from "@/Providers/Theme";
 import { User } from "@/types/models";
 import { Link, usePage } from "@inertiajs/react";
 import {
-  Flag,
   Home,
   ListChecks,
   LogOut,
+  MessageSquare,
   Moon,
   Sun,
   UserRound,
@@ -28,9 +28,9 @@ const menus = [
     icon: <ListChecks className="w-4 h-4" />,
   },
   {
-    title: "Pengaduan saya",
-    route: "dashboard.complaint",
-    icon: <Flag className="w-4 h-4" />,
+    title: "Ulasan saya",
+    route: "dashboard.review",
+    icon: <MessageSquare className="w-4 h-4" />,
   },
   {
     title: "Profil saya",

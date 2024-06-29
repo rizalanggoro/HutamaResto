@@ -29,6 +29,9 @@ export type Order = {
   user_id: number;
   status: "waiting_payment" | "processing" | "delivering" | "done";
   receipt_path: string | undefined;
+  message: string | undefined;
+  type: "dine-in" | "delivery-order";
+  created_at: Date;
 };
 
 export type OrderItem = {

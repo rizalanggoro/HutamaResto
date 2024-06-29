@@ -44,13 +44,17 @@ import {
 import useServerPooling from "@/Hooks/server-pooling";
 import DashboardCustomerLayout from "@/Layouts/DashboardCustomer";
 import { PageProps } from "@/types";
-import { Franchise, Order } from "@/types/models";
+import { Franchise, Menu, Order, OrderItem } from "@/types/models";
 import { orderStatuses } from "@/types/order-status";
 import { Head, Link, router, useForm } from "@inertiajs/react";
 import { Eye, Loader2, PenLine, Trash2, Upload } from "lucide-react";
 import { useState } from "react";
+import { FormattedNumber } from "react-intl";
 
-type OrderType = Order & { franchise: Franchise };
+type OrderType = Order & {
+  franchise: Franchise;
+  order_items: (OrderItem & { menu: Menu })[];
+};
 
 export default function Page(
   props: PageProps<{
@@ -140,6 +144,9 @@ export default function Page(
                 <SelectItem value="waiting_payment">
                   Menunggu pembayaran
                 </SelectItem>
+                <SelectItem value="waiting_payment_verification">
+                  Menunggu verifikasi pembayaran
+                </SelectItem>
                 <SelectItem value="processing">Sedang diproses</SelectItem>
                 <SelectItem value="delivering">Dalam pengantaran</SelectItem>
                 <SelectItem value="done">Selesai</SelectItem>
@@ -158,8 +165,9 @@ export default function Page(
             <Table>
               <TableHeader className="bg-muted/70">
                 <TableRow>
-                  <TableHead>No</TableHead>
                   <TableHead>Nama Resto</TableHead>
+                  <TableHead>Total Menu</TableHead>
+                  <TableHead>Total Harga</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Aksi</TableHead>
                 </TableRow>
@@ -177,8 +185,31 @@ export default function Page(
                 <TableBody>
                   {props.orders.map((order, index) => (
                     <TableRow key={"order-item-" + index}>
-                      <TableCell>{index + 1}</TableCell>
-                      <TableCell>{order.franchise.name}</TableCell>
+                      <TableCell className="space-y-1">
+                        <p className="font-medium">{order.franchise.name}</p>
+                        <p className="text-muted-foreground text-sm">
+                          {order.type === "dine-in"
+                            ? "Makan di tempat"
+                            : "Pesan antar"}
+                        </p>
+                      </TableCell>
+                      <TableCell>
+                        {order.order_items.reduce(
+                          (prev, curr) => prev + curr.count,
+                          0,
+                        )}{" "}
+                        menu
+                      </TableCell>
+                      <TableCell>
+                        <FormattedNumber
+                          value={order.order_items.reduce(
+                            (prev, curr) => prev + curr.count * curr.menu.price,
+                            0,
+                          )}
+                          style="currency"
+                          currency="IDR"
+                        />
+                      </TableCell>
                       <TableCell>
                         <Badge variant={"outline"} className="lowercase">
                           {orderStatuses[order.status]}

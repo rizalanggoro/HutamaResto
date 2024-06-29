@@ -1,20 +1,17 @@
 import BreadcrumbComponent from "@/Components/Breadcrumb";
-import { Card, CardFooter, CardHeader } from "@/Components/ui/card";
-import { Label } from "@/Components/ui/label";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/Components/ui/table";
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/Components/ui/card";
+import { Label } from "@/Components/ui/label";
+import { Separator } from "@/Components/ui/separator";
 import DashboardCustomerLayout from "@/Layouts/DashboardCustomer";
 import { PageProps } from "@/types";
 import { Franchise, Menu, Order, OrderItem } from "@/types/models";
 import { Head } from "@inertiajs/react";
-import { User } from "lucide-react";
+import { FormattedDate, FormattedNumber } from "react-intl";
 
 export default function Page(
   props: PageProps<{
@@ -30,7 +27,7 @@ export default function Page(
     <>
       <Head title="Detail Pesanan" />
       <DashboardCustomerLayout>
-        <div>
+        <div className="max-w-lg">
           <BreadcrumbComponent
             items={[
               { title: "Halaman utama", href: route("dashboard") },
@@ -38,72 +35,110 @@ export default function Page(
               { title: "Detail pesanan" },
             ]}
           />
-          <p className="mt-4 font-semibold text-2xl">Detail Pesanan</p>
-          <p className="text-muted-foreground mt-2">
-            Berikut detail informasi dari pesanan yang Anda lakukan
-          </p>
-
-          <div className="max-w-xl mt-8 space-y-2">
-            <Card>
-              <CardHeader className="space-y-4">
-                <Label>Anda melakukan pemesanan sebagai</Label>
-                <div className="flex items-center gap-4">
-                  <div className="h-12 border rounded-full w-12 flex items-center justify-center">
-                    <User className="w-4 h-4" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-semibold">{props.auth.user.name}</p>
-                    <p className="text-muted-foreground text-sm">
-                      {props.auth.user.email}
-                    </p>
-                  </div>
-                </div>
-              </CardHeader>
-            </Card>
-
-            <Card>
-              <CardHeader className="space-y-2">
-                <p className="text-lg font-semibold">
-                  {props.order.franchise.name}
-                </p>
-                <p className="text-muted-foreground">
-                  Berikut beberapa daftar makanan dan minuman yang Anda pesan
-                </p>
-              </CardHeader>
-
-              <CardFooter>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>No</TableHead>
-                      <TableHead>Nama</TableHead>
-                      <TableHead>Jumlah</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {props.order.order_items.map((item, index) => (
-                      <TableRow key={"order-item-" + index}>
-                        <TableCell>{index + 1}</TableCell>
-                        <TableCell>{item.menu.name}</TableCell>
-                        <TableCell>{item.count}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                  <TableFooter>
-                    <TableRow>
-                      <TableCell colSpan={2}>Total</TableCell>
-                      <TableCell>
-                        {props.order.order_items.reduce(
-                          (prev, current) => prev + current.count,
-                          0,
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  </TableFooter>
-                </Table>
-              </CardFooter>
-            </Card>
+          <div className="mt-4 space-y-2">
+            <p className="font-semibold text-2xl">Detail Pesanan</p>
+            <p className="text-muted-foreground">
+              Berikut detail informasi dari pesanan yang Anda lakukan
+            </p>
           </div>
+
+          <Card className="mt-8">
+            <CardHeader className="bg-muted/70">
+              <CardTitle className="text-lg">
+                {props.order.franchise.name}
+              </CardTitle>
+              <CardDescription>
+                <FormattedDate
+                  value={props.order.created_at}
+                  dateStyle="full"
+                />
+              </CardDescription>
+            </CardHeader>
+
+            <div className="p-6 space-y-2">
+              <div className="text-sm flex items-center justify-between">
+                <Label>Jenis pemesanan</Label>
+                <p className="text-muted-foreground">
+                  {props.order.type === "dine-in"
+                    ? "Makan di tempat"
+                    : "Pesan antar"}
+                </p>
+              </div>
+              <div>
+                <Label>Pesan tambahan</Label>
+                <p className="text-sm text-muted-foreground">
+                  {props.order.message ?? "Tidak ada"}
+                </p>
+              </div>
+            </div>
+
+            <Separator />
+
+            <div className="p-6">
+              <Label className="font-semibold">Detail Pesanan</Label>
+              <div className="flex flex-col gap-2 mt-4">
+                {props.order.order_items.map((orderItem, index) => (
+                  <div
+                    key={"chosen-menu-item-" + index}
+                    className="flex items-center"
+                  >
+                    <div className="flex-1 flex items-center justify-between">
+                      <p className="text-sm text-muted-foreground">
+                        {orderItem.menu.name} x {orderItem.count}
+                      </p>
+                      <p className="text-sm text-foreground font-medium">
+                        <FormattedNumber
+                          value={orderItem.menu.price * orderItem.count}
+                          style="currency"
+                          currency="IDR"
+                        />
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <Separator className="my-4" />
+              <div className="flex items-center justify-between">
+                <Label>Total</Label>
+                <p className="text-sm font-medium">
+                  <FormattedNumber
+                    value={props.order.order_items.reduce(
+                      (prev, curr) => prev + curr.menu.price * curr.count,
+                      0,
+                    )}
+                    style="currency"
+                    currency="IDR"
+                  />
+                </p>
+              </div>
+            </div>
+
+            <Separator />
+
+            <div className="p-6">
+              <Label>Informasi Pemesan</Label>
+              <div className="space-y-2 mt-2">
+                <div className="flex items-center justify-between text-sm text-muted-foreground">
+                  <p>Nama</p>
+                  <p className="text-foreground font-medium">
+                    {props.auth.user.name}
+                  </p>
+                </div>
+                <div className="flex items-center justify-between text-sm text-muted-foreground">
+                  <p>Email</p>
+                  <p className="text-foreground font-medium">
+                    {props.auth.user.email}
+                  </p>
+                </div>
+                <div className="flex items-center justify-between text-sm text-muted-foreground">
+                  <p>Alamat</p>
+                  <p className="text-foreground font-medium">
+                    {props.auth.user.address}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </Card>
         </div>
       </DashboardCustomerLayout>
     </>

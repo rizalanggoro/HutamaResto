@@ -26,8 +26,8 @@ Route::middleware([CustomerAuthMiddleware::class])->group(function () {
         Route::delete('order/{id}', [CustomerOrderController::class, 'delete'])
             ->name('dashboard.order.delete');
 
-        // complaint
-        Route::get('complaint', [CustomerComplaintController::class, 'show'])->name('dashboard.complaint');
+        // review
+        Route::get('review', [CustomerComplaintController::class, 'show'])->name('dashboard.review');
 
         // payment
         Route::post('payment/upload-receipt', [CustomerPaymentController::class, 'uploadReceipt'])->name('dashboard.payment.uploadReceipt');

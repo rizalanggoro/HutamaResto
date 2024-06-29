@@ -15,6 +15,8 @@ class Order extends Model {
         'user_id',
         'franchise_id',
         'status',
+        'message',
+        'type',
     ];
 
     public function franchise(): BelongsTo {

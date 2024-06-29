@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->enum('status', ['waiting_payment', 'waiting_payment_verification', 'processing', 'delivering', 'done'])->default('waiting_payment');
             $table->string('receipt_path')->nullable();
             $table->longText('message')->nullable();
+            $table->enum('type', ['dine-in', 'delivery-order'])->default('dine-in');
             $table->timestamps();
         });
 

@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Storage;
 
 class CustomerOrderController extends Controller {
   public function show(Request $request) {
@@ -22,7 +23,7 @@ class CustomerOrderController extends Controller {
         $status = $request->query('status', 'all');
         return $status === 'all' ? $query : $query->whereStatus($status);
       })
-      ->with('franchise')
+      ->with(['franchise', 'orderItems', 'orderItems.menu'])
       ->get();
 
     return Inertia::render("Customer/Dashboard/Order/Index", [
@@ -32,16 +33,32 @@ class CustomerOrderController extends Controller {
   }
 
   public function showChooseRestaurant() {
-    $franchises = Franchise::orderBy('name')->get();
-    return Inertia::render('Customer/Dashboard/Order/Create/ChooseRestaurant', compact('franchises'));
+    $franchises = collect(Franchise::orderBy('name')->get())
+      ->map(function ($item) {
+        $item->image = Storage::disk('public')->url($item->image);
+        return $item;
+      });
+
+    return Inertia::render(
+      'Customer/Dashboard/Order/Create/ChooseRestaurant',
+      compact('franchises')
+    );
   }
 
   public function showChooseMenu(Request $request,  $franchiseId) {
     $franchise = Franchise::whereId($franchiseId)->firstOrFail();
-    $menus = $franchise->menus()->where(function (Builder $query) use ($request) {
-      $filter = $request->query('filter', 'all');
-      return $filter === 'all' ? $query : $query->whereType($filter);
-    })->get();
+    $menus = collect(
+      $franchise->menus()
+        ->orderBy('name')
+        ->where(function (Builder $query) use ($request) {
+          $type = $request->query('type', 'all');
+          return $type === 'all' ? $query : $query->whereType($type);
+        })
+        ->get()
+    )->map(function ($item) {
+      $item->image = Storage::disk('public')->url($item->image);
+      return $item;
+    });
 
     return Inertia::render(
       'Customer/Dashboard/Order/Create/ChooseMenu',
@@ -69,6 +86,8 @@ class CustomerOrderController extends Controller {
         if ($order = Order::create([
           'user_id' => $userId,
           'franchise_id' => $request->franchiseId,
+          'message' => $request->message,
+          'type' => $request->type,
         ])) {
           foreach ($orderItems as $orderItem) {
             OrderItem::create([
