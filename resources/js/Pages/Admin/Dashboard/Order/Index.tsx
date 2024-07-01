@@ -13,7 +13,7 @@ import DashboardAdminLayout from "@/Layouts/DashboardAdmin";
 import { PageProps } from "@/types";
 import { Order, User } from "@/types/models";
 import { Head, Link } from "@inertiajs/react";
-import { Eye, Plus, ReceiptText } from "lucide-react";
+import { Eye, ReceiptText } from "lucide-react";
 
 export default function Page(
   props: PageProps<{
@@ -46,10 +46,6 @@ export default function Page(
                 <ReceiptText className="w-4 h-4 mr-2" />
                 Verifikasi pembayaran
               </Link>
-            </Button>
-            <Button variant={"outline"}>
-              <Plus className="w-4 h-4 mr-2" />
-              Tambah pesanan
             </Button>
           </div>
           <Card className="mt-4 overflow-hidden">

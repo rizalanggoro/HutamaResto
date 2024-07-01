@@ -4,7 +4,7 @@ import NavbarComponent from "@/Components/Navbar";
 import { Button } from "@/Components/ui/button";
 import { PageProps } from "@/types";
 import { Franchise } from "@/types/models";
-import { Head } from "@inertiajs/react";
+import { Head, Link } from "@inertiajs/react";
 import { LandPlot, Percent, Utensils } from "lucide-react";
 
 export default function LandingPage(
@@ -33,9 +33,11 @@ export default function LandingPage(
             </p>
 
             <div className="mt-8 flex items-center gap-2">
-              <Button>
-                <Utensils className="w-4 h-4 mr-2" />
-                Daftar menu
+              <Button asChild>
+                <Link href={route("home.menu")}>
+                  <Utensils className="w-4 h-4 mr-2" />
+                  Daftar menu
+                </Link>
               </Button>
               <Button variant={"outline"}>
                 <Percent className="w-4 h-4 mr-2" />

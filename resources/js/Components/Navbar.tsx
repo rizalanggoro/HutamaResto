@@ -3,7 +3,7 @@ import { useTheme } from "@/Providers/Theme";
 import { cn } from "@/lib/utils";
 import { User } from "@/types/models";
 import { Link, usePage } from "@inertiajs/react";
-import { LayoutGrid, LogIn, LogOut, Moon, Sun } from "lucide-react";
+import { LayoutGrid, LogInIcon, LogOut, Moon, Sun } from "lucide-react";
 import { PropsWithChildren } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import {
@@ -34,7 +34,7 @@ export default function NavbarComponent({
 }: PropsWithChildren<{
   variant?: "xs" | "sm" | "md" | "lg" | "xl";
 }>) {
-  const sharedProps = usePage<{ auth: { user: User | null } }>().props;
+  const pageProps = usePage<{ auth: { user: User | null } }>().props;
   const { theme, setTheme } = useTheme();
 
   const onClickButtonSwitchTheme = () => {
@@ -86,46 +86,44 @@ export default function NavbarComponent({
               )}
             </Button>
 
-            <DropdownMenu>
-              <DropdownMenuTrigger>
-                <Avatar>
-                  <AvatarImage src="https://github.com/shadcn.png" />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                {sharedProps.auth.user ? (
-                  <>
-                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild>
-                      <Link href={route("dashboard")}>
-                        <LayoutGrid className="w-4 h-4 mr-2" />
-                        Dashboard
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link
-                        href={route("logout")}
-                        method="post"
-                        as={"button"}
-                        className="w-full"
-                      >
-                        <LogOut className="w-4 h-4 mr-2" />
-                        Keluar
-                      </Link>
-                    </DropdownMenuItem>
-                  </>
-                ) : (
+            {pageProps.auth.user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <Avatar>
+                    <AvatarImage src="https://github.com/shadcn.png" />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <Link href={route("login")}>
-                      <LogIn className="w-4 h-4 mr-2" />
-                      Masuk
+                    <Link href={route("dashboard")}>
+                      <LayoutGrid className="w-4 h-4 mr-2" />
+                      Dashboard
                     </Link>
                   </DropdownMenuItem>
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
+                  <DropdownMenuItem asChild>
+                    <Link
+                      href={route("logout")}
+                      method="post"
+                      as={"button"}
+                      className="w-full"
+                    >
+                      <LogOut className="w-4 h-4 mr-2" />
+                      Keluar
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Button asChild>
+                <Link href={route("login")}>
+                  <LogInIcon className="w-4 h-4 mr-2" />
+                  Masuk
+                </Link>
+              </Button>
+            )}
           </div>
         </nav>
       </header>

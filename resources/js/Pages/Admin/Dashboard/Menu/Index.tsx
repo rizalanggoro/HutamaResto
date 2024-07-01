@@ -172,6 +172,10 @@ export default function Page(
                         onClick={() => {
                           setSelectedMenu(menu);
                           setIsDialogUpdateMenuAvailabilityOpen(true);
+                          updateMenuAvailabilityForm.setData({
+                            availability:
+                              menu.availability === 0 ? true : false,
+                          });
                         }}
                         variant={
                           menu.availability === 0 ? "outline" : "default"
