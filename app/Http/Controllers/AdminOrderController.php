@@ -16,6 +16,7 @@ class AdminOrderController extends Controller {
     public function show() {
         $franchise = Auth::user()->franchise()->firstOrFail();
         $orders = $franchise->orders()
+            ->orderBy('created_at', 'desc')
             ->whereStatus('processing')
             ->with('user')
             ->withCount('orderItems')
@@ -56,7 +57,7 @@ class AdminOrderController extends Controller {
 
     public function showDetail($orderId) {
         $order = Order::whereId($orderId)
-            ->with(['user', 'orderItems', 'orderItems.menu'])
+            ->with(['user', 'orderItems', 'orderItems.menu', 'franchise'])
             ->firstOrFail();
 
         return Inertia::render(
@@ -78,12 +79,46 @@ class AdminOrderController extends Controller {
         $orderItems = $order->orderItems()->get();
 
         DB::transaction(function () use ($order, $orderItems) {
-            $order->status = 'done';
+            $order->status = $order->type === 'delivery-order' ? 'delivering' : 'done';
             $order->save();
 
             $orderItems->toQuery()->update(['is_done' => 1]);
         });
 
         return response(null, Response::HTTP_OK);
+    }
+
+    public function showDelivering() {
+        $orders = Order::whereStatus('delivering')
+            ->with(['user'])
+            ->orderBy('created_at')
+            ->get();
+
+        return Inertia::render(
+            'Admin/Dashboard/Order/Delivering',
+            compact('orders')
+        );
+    }
+
+    public function showDeliveringDetail($id) {
+        $order = Order::whereId($id)
+            ->with(['user', 'orderItems', 'orderItems.menu', 'franchise'])
+            ->firstOrFail();
+
+        return Inertia::render(
+            'Admin/Dashboard/Order/Delivering/Detail',
+            compact('order')
+        );
+    }
+
+    public function markDeliveringAsDone($id) {
+        $order = Order::whereId($id)->firstOrFail();
+        $order->status = 'done';
+
+        if ($order->save()) {
+            return response(null, Response::HTTP_OK);
+        } else {
+            return response(null, Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }

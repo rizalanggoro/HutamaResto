@@ -36,6 +36,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/Components/ui/table";
+import { Textarea } from "@/Components/ui/textarea";
 import {
   Tooltip,
   TooltipContent,
@@ -43,17 +44,28 @@ import {
 } from "@/Components/ui/tooltip";
 import useServerPooling from "@/Hooks/server-pooling";
 import DashboardCustomerLayout from "@/Layouts/DashboardCustomer";
+import { cn } from "@/lib/utils";
 import { PageProps } from "@/types";
 import { Franchise, Menu, Order, OrderItem } from "@/types/models";
 import { orderStatuses } from "@/types/order-status";
 import { Head, Link, router, useForm } from "@inertiajs/react";
-import { Eye, Loader2, PenLine, Trash2, Upload } from "lucide-react";
+import {
+  Eye,
+  Loader2,
+  MessageSquare,
+  PenLine,
+  Send,
+  Star,
+  Trash2,
+  Upload,
+} from "lucide-react";
 import { useState } from "react";
 import { FormattedNumber } from "react-intl";
 
 type OrderType = Order & {
   franchise: Franchise;
   order_items: (OrderItem & { menu: Menu })[];
+  reviews_count: number;
 };
 
 export default function Page(
@@ -68,6 +80,15 @@ export default function Page(
     useState(false);
   const [isDialogConfirmDeleteOrderOpen, setIsDialogConfirmDeleteOrderOpen] =
     useState(false);
+  const [isDialogCreateReviewOpen, setIsDialogCreateReviewOpen] =
+    useState(false);
+
+  const formCreateReview = useForm({
+    star: 5,
+    review: "",
+    orderId: -1,
+    franchiseId: -1,
+  });
 
   const { data, setData, post, processing } = useForm({
     orderId: -1,
@@ -273,6 +294,33 @@ export default function Page(
                             </TooltipContent>
                           </Tooltip>
                         )}
+
+                        {order.status === "done" &&
+                          order.reviews_count === 0 && (
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Button
+                                  variant={"outline"}
+                                  size={"icon"}
+                                  onClick={() => {
+                                    setSelectedOrder(order);
+                                    setIsDialogCreateReviewOpen(true);
+                                    formCreateReview.setData({
+                                      franchiseId: order.franchise.id,
+                                      orderId: order.id,
+                                      review: "",
+                                      star: 5,
+                                    });
+                                  }}
+                                >
+                                  <MessageSquare className="w-4 h-4" />
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>Berikan ulasan</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          )}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -282,6 +330,77 @@ export default function Page(
           </Card>
         </div>
       </DashboardCustomerLayout>
+
+      {/* dialog create review */}
+      <Dialog
+        open={isDialogCreateReviewOpen}
+        onOpenChange={(e) => setIsDialogCreateReviewOpen(e)}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Berikan Ulasan</DialogTitle>
+            <DialogDescription>
+              Berikan ulasan sebagai bentuk respon terhadap pesanan yang sudah
+              Anda buat
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-1">
+              <Label>Masukkan ulasan</Label>
+              <Textarea
+                className="h-48 resize-none"
+                value={formCreateReview.data.review}
+                onChange={(e) =>
+                  formCreateReview.setData({
+                    ...formCreateReview.data,
+                    review: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <div className="flex items-center justify-center gap-2">
+              {Array.from({ length: 5 }).map((_, index) => (
+                <Star
+                  onClick={() =>
+                    formCreateReview.setData({
+                      ...formCreateReview.data,
+                      star: index + 1,
+                    })
+                  }
+                  className={cn(
+                    "w-6 h-6",
+                    index < formCreateReview.data.star
+                      ? "text-primary"
+                      : "text-muted-foreground/40",
+                  )}
+                  key={"star-item-" + index}
+                />
+              ))}
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              onClick={() => {
+                formCreateReview.post(route("dashboard.review"), {
+                  onSuccess: () => router.reload(),
+                  onFinish: () => {
+                    formCreateReview.reset();
+                    setIsDialogCreateReviewOpen(false);
+                  },
+                });
+              }}
+              disabled={formCreateReview.processing}
+            >
+              {formCreateReview.processing ? (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              ) : (
+                <Send className="w-4 h-4 mr-2" />
+              )}
+              Kirim
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* dialog upload receipt */}
       <Dialog

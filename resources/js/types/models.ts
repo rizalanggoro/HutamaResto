@@ -27,7 +27,12 @@ export type Menu = {
 export type Order = {
   id: number;
   user_id: number;
-  status: "waiting_payment" | "processing" | "delivering" | "done";
+  status:
+    | "waiting_payment"
+    | "waiting_payment_verification"
+    | "processing"
+    | "delivering"
+    | "done";
   receipt_path: string | undefined;
   message: string | undefined;
   type: "dine-in" | "delivery-order";
@@ -40,4 +45,14 @@ export type OrderItem = {
   menu_id: number;
   count: number;
   is_done: number;
+};
+
+export type Review = {
+  id: number;
+  star: number;
+  review: string;
+  user_id: number;
+  order_id: number;
+  franchise_id: number;
+  created_at: string;
 };

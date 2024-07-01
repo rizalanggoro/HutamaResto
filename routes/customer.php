@@ -5,6 +5,7 @@ use App\Http\Controllers\CustomerDashboardController;
 use App\Http\Controllers\CustomerOrderController;
 use App\Http\Controllers\CustomerPaymentController;
 use App\Http\Controllers\CustomerProfileController;
+use App\Http\Controllers\CustomerReviewController;
 use App\Http\Middleware\CustomerAuthMiddleware;
 use Illuminate\Support\Facades\Route;
 
@@ -27,7 +28,8 @@ Route::middleware([CustomerAuthMiddleware::class])->group(function () {
             ->name('dashboard.order.delete');
 
         // review
-        Route::get('review', [CustomerComplaintController::class, 'show'])->name('dashboard.review');
+        Route::get('review', [CustomerReviewController::class, 'show'])->name('dashboard.review');
+        Route::post('review', [CustomerReviewController::class, 'create']);
 
         // payment
         Route::post('payment/upload-receipt', [CustomerPaymentController::class, 'uploadReceipt'])->name('dashboard.payment.uploadReceipt');

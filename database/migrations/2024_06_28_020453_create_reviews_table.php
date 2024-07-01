@@ -15,12 +15,14 @@ return new class extends Migration {
             $table->longText('review')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('order_id');
+            $table->unsignedBigInteger('franchise_id');
             $table->timestamps();
         });
 
         Schema::table('reviews', function (Blueprint $table) {
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->foreign('order_id')->references('id')->on('orders')->cascadeOnDelete();
+            $table->foreign('franchise_id')->references('id')->on('franchises')->cascadeOnDelete();
         });
     }
 

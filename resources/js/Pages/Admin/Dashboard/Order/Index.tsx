@@ -13,7 +13,7 @@ import DashboardAdminLayout from "@/Layouts/DashboardAdmin";
 import { PageProps } from "@/types";
 import { Order, User } from "@/types/models";
 import { Head, Link } from "@inertiajs/react";
-import { Eye, ReceiptText } from "lucide-react";
+import { Eye, ReceiptText, Truck } from "lucide-react";
 
 export default function Page(
   props: PageProps<{
@@ -41,6 +41,12 @@ export default function Page(
           </div>
 
           <div className="mt-8 flex justify-end gap-1">
+            <Button variant={"outline"} asChild>
+              <Link href={route("admin.dashboard.order.delivering")}>
+                <Truck className="w-4 h-4 mr-2" />
+                Pengantaran
+              </Link>
+            </Button>
             <Button variant={"outline"} asChild>
               <Link href={route("admin.dashboard.order.paymentVerification")}>
                 <ReceiptText className="w-4 h-4 mr-2" />

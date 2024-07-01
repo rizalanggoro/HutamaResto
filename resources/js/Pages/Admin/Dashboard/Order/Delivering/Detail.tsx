@@ -22,8 +22,7 @@ import DashboardAdminLayout from "@/Layouts/DashboardAdmin";
 import { PageProps } from "@/types";
 import { Franchise, Menu, Order, OrderItem, User } from "@/types/models";
 import { Head, router, useForm } from "@inertiajs/react";
-import { CheckCheck } from "lucide-react";
-import { useEffect } from "react";
+import { CheckCheck, Loader2 } from "lucide-react";
 import { FormattedDate } from "react-intl";
 
 export default function Page(
@@ -35,32 +34,7 @@ export default function Page(
     };
   }>,
 ) {
-  const formUpdateIsDone = useForm({
-    isDone: false,
-    orderItemId: -1,
-  });
-
-  useEffect(() => {
-    if (formUpdateIsDone.data.orderItemId !== -1) {
-      formUpdateIsDone.patch(
-        route("admin.dashboard.order.orderItem.updateIsDone", {
-          orderItemId: formUpdateIsDone.data.orderItemId,
-        }),
-        { onSuccess: () => router.reload() },
-      );
-    }
-  }, [formUpdateIsDone.data]);
-
   const formMarkAsDone = useForm();
-  const onClickButtonMarkAsDone = () => {
-    formMarkAsDone.patch(
-      route("admin.dashboard.order.markAsDone", { orderId: props.order.id }),
-      {
-        onSuccess: () =>
-          router.visit(route("admin.dashboard.order"), { replace: true }),
-      },
-    );
-  };
 
   return (
     <>
@@ -71,6 +45,10 @@ export default function Page(
             items={[
               { title: "Halaman utama", href: route("admin.dashboard") },
               { title: "Daftar pesanan", href: route("admin.dashboard.order") },
+              {
+                title: "Pengantaran",
+                href: route("admin.dashboard.order.delivering"),
+              },
               { title: "Detail pesanan" },
             ]}
           />
@@ -97,15 +75,7 @@ export default function Page(
                   {props.order.order_items.map((orderItem, index) => (
                     <TableRow key={"order-item-" + index}>
                       <TableCell className="text-center px-0">
-                        <Checkbox
-                          checked={orderItem.is_done === 1}
-                          onCheckedChange={() =>
-                            formUpdateIsDone.setData({
-                              isDone: orderItem.is_done === 1 ? false : true,
-                              orderItemId: orderItem.id,
-                            })
-                          }
-                        />
+                        <Checkbox checked={orderItem.is_done === 1} />
                       </TableCell>
                       <TableCell>{orderItem.menu.name}</TableCell>
                       <TableCell>{orderItem.count}</TableCell>
@@ -184,11 +154,29 @@ export default function Page(
                     </div>
                   </div>
                 </Card>
-
                 <div className="mt-4 flex justify-end">
-                  <Button onClick={onClickButtonMarkAsDone}>
-                    <CheckCheck className="w-4 h-4 mr-2" />
-                    Selesaikan pesanan
+                  <Button
+                    onClick={() => {
+                      formMarkAsDone.patch(
+                        route("admin.dashboard.order.delivering.markAsDone", {
+                          id: props.order.id,
+                        }),
+                        {
+                          onSuccess: () =>
+                            router.visit(
+                              route("admin.dashboard.order.delivering"),
+                            ),
+                        },
+                      );
+                    }}
+                    disabled={formMarkAsDone.processing}
+                  >
+                    {formMarkAsDone.processing ? (
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    ) : (
+                      <CheckCheck className="w-4 h-4 mr-2" />
+                    )}
+                    Tandai selesai
                   </Button>
                 </div>
               </div>

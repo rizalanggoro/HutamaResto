@@ -49,7 +49,7 @@ export default function Page(
 
   const [isDialogConfirmPaymentOpen, setIsDialogConfirmPaymentOpen] =
     useState(false);
-  const [isDialogShowReceiptOpen, setIsDialogShowReceiptOpen] = useState(true);
+  const [isDialogShowReceiptOpen, setIsDialogShowReceiptOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<CustomOrder>();
 
   const formVerify = useForm();

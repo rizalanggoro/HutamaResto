@@ -24,6 +24,7 @@ class CustomerOrderController extends Controller {
         return $status === 'all' ? $query : $query->whereStatus($status);
       })
       ->with(['franchise', 'orderItems', 'orderItems.menu'])
+      ->withCount('reviews')
       ->get();
 
     return Inertia::render("Customer/Dashboard/Order/Index", [
