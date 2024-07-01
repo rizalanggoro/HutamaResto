@@ -67,9 +67,11 @@ export default function LandingPage(
               ))}
             </div>
 
-            <Button variant={"outline"} className="mt-4">
-              <LandPlot className="w-4 h-4 mr-2" />
-              Lihat lainnya
+            <Button variant={"outline"} className="mt-4" asChild>
+              <Link href={route("home.franchise")}>
+                <LandPlot className="w-4 h-4 mr-2" />
+                Lihat lainnya
+              </Link>
             </Button>
           </section>
 

@@ -10,6 +10,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Storage;
 
 class AdminOrderController extends Controller {
     public function show() {
@@ -28,10 +29,16 @@ class AdminOrderController extends Controller {
 
     public function showPaymentVerification() {
         $franchise = Auth::user()->franchise()->firstOrFail();
-        $orders = $franchise->orders()
-            ->whereStatus('waiting_payment_verification')
-            ->with(['user', 'orderItems', 'orderItems.menu'])
-            ->get();
+        $orders = collect(
+            $franchise->orders()
+                ->orderBy('created_at', 'desc')
+                ->whereStatus('waiting_payment_verification')
+                ->with(['user', 'orderItems', 'orderItems.menu'])
+                ->get()
+        )->map(function ($item) {
+            $item->receipt_path = Storage::disk('public')->url($item->receipt_path);
+            return $item;
+        });
 
         return Inertia::render(
             'Admin/Dashboard/Order/PaymentVerification',

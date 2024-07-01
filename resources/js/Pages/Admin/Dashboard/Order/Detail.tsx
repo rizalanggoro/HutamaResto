@@ -56,7 +56,6 @@ export default function Page(
   return (
     <>
       <Head title="Detail Pesanan" />
-
       <DashboardAdminLayout>
         <div>
           <BreadcrumbComponent
@@ -66,16 +65,18 @@ export default function Page(
               { title: "Detail pesanan" },
             ]}
           />
-          <p className="text-2xl font-semibold mt-4">Detail Pesanan</p>
-          <p className="mt-2">
-            Berikut adalah daftar pesanan yang membutuhkan tindakan segera untuk
-            memastikan semua pelanggan menerima layanan tepat waktu dan
-            memuaskan.
-          </p>
+          <div className="mt-4 space-y-2">
+            <p className="text-2xl font-semibold">Detail Pesanan</p>
+            <p className="text-muted-foreground">
+              Berikut adalah daftar pesanan yang membutuhkan tindakan segera
+              untuk memastikan semua pelanggan menerima layanan tepat waktu dan
+              memuaskan.
+            </p>
+          </div>
 
-          <Card className="mt-8">
+          <Card className="mt-8 overflow-hidden">
             <Table>
-              <TableHeader>
+              <TableHeader className="bg-muted/70">
                 <TableRow>
                   <TableHead className="w-12 text-center">#</TableHead>
                   <TableHead>Menu</TableHead>

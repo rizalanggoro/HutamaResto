@@ -11,6 +11,14 @@ import {
 import { Button } from "@/Components/ui/button";
 import { Card } from "@/Components/ui/card";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/Components/ui/dialog";
+import {
   Table,
   TableBody,
   TableCell,
@@ -41,9 +49,8 @@ export default function Page(
 
   const [isDialogConfirmPaymentOpen, setIsDialogConfirmPaymentOpen] =
     useState(false);
-  const [selectedOrder, setSelectedOrder] = useState<
-    CustomOrder & { number: number }
-  >();
+  const [isDialogShowReceiptOpen, setIsDialogShowReceiptOpen] = useState(true);
+  const [selectedOrder, setSelectedOrder] = useState<CustomOrder>();
 
   const formVerify = useForm();
   const onClickButtonVerify = () => {
@@ -85,7 +92,7 @@ export default function Page(
             <Table>
               <TableHeader className="bg-muted/70">
                 <TableRow>
-                  <TableHead>Nama Pemesan</TableHead>
+                  <TableHead>Pemesan</TableHead>
                   <TableHead>Total Menu</TableHead>
                   <TableHead>Total Harga</TableHead>
                   <TableHead>Bukti Pembayaran</TableHead>
@@ -95,7 +102,12 @@ export default function Page(
               <TableBody>
                 {props.orders.map((order, index) => (
                   <TableRow key={"order-item-" + index}>
-                    <TableCell>{order.user.name}</TableCell>
+                    <TableCell>
+                      <p className="font-medium">{order.user.name}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {order.user.email}
+                      </p>
+                    </TableCell>
                     <TableCell>
                       {order.order_items.reduce(
                         (prev, curr) => prev + curr.count,
@@ -105,21 +117,30 @@ export default function Page(
                     <TableCell>
                       <FormattedNumber
                         value={order.order_items.reduce(
-                          (prev, curr) => prev + curr.menu.price,
+                          (prev, curr) => prev + curr.count * curr.menu.price,
                           0,
                         )}
                         style="currency"
                         currency="IDR"
                       />
                     </TableCell>
-                    <TableCell>sama aja blom ada</TableCell>
+                    <TableCell>
+                      <img
+                        onClick={() => {
+                          setSelectedOrder(order);
+                          setIsDialogShowReceiptOpen(true);
+                        }}
+                        src={order.receipt_path}
+                        className="w-24 h-24 object-cover"
+                      />
+                    </TableCell>
                     <TableCell>
                       <Button
                         variant={"outline"}
                         size={"icon"}
                         onClick={() => {
                           setIsDialogConfirmPaymentOpen(true);
-                          setSelectedOrder({ ...order, number: index + 1 });
+                          setSelectedOrder(order);
                         }}
                       >
                         <Check className="w-4 h-4" />
@@ -133,6 +154,27 @@ export default function Page(
         </div>
       </DashboardAdminLayout>
 
+      {/* dialog show payment */}
+      <Dialog
+        open={isDialogShowReceiptOpen}
+        onOpenChange={(e) => setIsDialogShowReceiptOpen(e)}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Bukti Pembayaran</DialogTitle>
+            <DialogDescription>
+              Berikut adalah bukti pembayaran yang dikirimkan oleh pemesan
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <img
+              src={selectedOrder?.receipt_path}
+              className="h-72 w-full object-cover"
+            />
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       {/* dialog confirm payment verification */}
       <AlertDialog
         open={isDialogConfirmPaymentOpen}
@@ -142,15 +184,24 @@ export default function Page(
           <AlertDialogHeader>
             <AlertDialogTitle>Konfirmasi Pembayaran</AlertDialogTitle>
             <AlertDialogDescription>
-              Apakah Anda yakin akan memverifikasi pembayaran{" "}
-              <span className="font-semibold">
-                nomor {selectedOrder?.number ?? -1}
-              </span>{" "}
-              atas nama{" "}
+              Apakah Anda yakin akan memverifikasi pembayaran atas nama{" "}
               <span className="font-semibold">
                 {selectedOrder?.user.name ?? "-"}
               </span>{" "}
-              dengan nominal <span className="font-semibold">blom ada</span>?
+              dengan nominal{" "}
+              <span className="font-semibold">
+                <FormattedNumber
+                  value={
+                    selectedOrder?.order_items.reduce(
+                      (prev, curr) => prev + curr.count * curr.menu.price,
+                      0,
+                    ) ?? 0
+                  }
+                  style="currency"
+                  currency="IDR"
+                />
+              </span>
+              ?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
