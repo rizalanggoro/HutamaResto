@@ -14,18 +14,9 @@ class SuperAdminDashboardController extends Controller {
   public function show(): Response {
     $franchiseCount = Franchise::count();
     $orderCount = Order::whereStatus('done')->count();
-    $income = collect(
-      OrderItem::with(['order', 'menu'])
-        ->whereHas('order', function ($order) {
-          return $order->whereStatus('done');
-        })
-        ->whereBetween('created_at', [
-          Carbon::now()->startOfMonth(),
-          Carbon::now()->endOfMonth(),
-        ])
-        ->get()
-    )->sum(function ($item) {
-      return  $item->count * $item->menu->price;
+    $franchiseIncomes = Franchise::all()->map(function ($q) {
+      $q->income = $q->incomeThisMonth();
+      return $q;
     });
 
     return Inertia::render(
@@ -33,7 +24,7 @@ class SuperAdminDashboardController extends Controller {
       compact(
         'franchiseCount',
         'orderCount',
-        'income',
+        'franchiseIncomes',
       )
     );
   }

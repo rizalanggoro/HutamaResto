@@ -11,6 +11,7 @@ class AdminDashboardController extends Controller {
     $user = Auth::user();
     $franchise = $user->franchise()->firstOrFail();
     $franchise->image = Storage::disk('public')->url($franchise->image);
+    $income = $franchise->incomeThisMonth();
 
     $orderWaitingPaymentVerificationCount = $franchise->orders()
       ->whereStatus('waiting_payment_verification')
@@ -24,7 +25,8 @@ class AdminDashboardController extends Controller {
       compact(
         'franchise',
         'orderWaitingPaymentVerificationCount',
-        'orderProcessingCount'
+        'orderProcessingCount',
+        'income',
       )
     );
   }

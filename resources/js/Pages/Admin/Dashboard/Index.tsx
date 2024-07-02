@@ -9,12 +9,14 @@ import { PageProps } from "@/types";
 import { Franchise } from "@/types/models";
 import { Head, Link, useForm } from "@inertiajs/react";
 import { ChevronRight, Loader2 } from "lucide-react";
+import { FormattedDate, FormattedNumber } from "react-intl";
 
 export default function Page(
   props: PageProps<{
     franchise: Franchise;
     orderWaitingPaymentVerificationCount: number;
     orderProcessingCount: number;
+    income: number | undefined;
   }>,
 ) {
   useServerPooling();
@@ -25,6 +27,7 @@ export default function Page(
       <Head title="Halaman Utama" />
       <DashboardAdminLayout>
         <div>
+          <p>{JSON.stringify(props.income)}</p>
           <BreadcrumbComponent items={[{ title: "Halaman utama" }]} />
 
           <p className="text-2xl font-semibold mt-4">
@@ -128,6 +131,35 @@ export default function Page(
                     </Link>
                   </Button>
                 </CardFooter>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-2xl">
+                    <FormattedNumber
+                      value={props.income ?? 0}
+                      style="currency"
+                      currency="IDR"
+                    />
+                  </CardTitle>
+                  <p className="text-muted-foreground">
+                    Restoran yang Anda kelola menghasilkan pendapatan sebesar{" "}
+                    <span>
+                      <FormattedNumber
+                        value={props.income ?? 0}
+                        style="currency"
+                        currency="IDR"
+                      />
+                    </span>{" "}
+                    selama bulan{" "}
+                    <span>
+                      <FormattedDate
+                        value={new Date()}
+                        month="long"
+                        year="numeric"
+                      />
+                    </span>
+                  </p>
+                </CardHeader>
               </Card>
             </div>
           </div>
