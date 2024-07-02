@@ -3,6 +3,7 @@ export type User = {
   name: string;
   email: string;
   address: string;
+  image: string | undefined;
 };
 
 export type Franchise = {

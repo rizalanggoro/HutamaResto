@@ -9,22 +9,45 @@ import {
 } from "@/Components/ui/card";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
+import { useToast } from "@/Components/ui/use-toast";
 import DashboardCustomerLayout from "@/Layouts/DashboardCustomer";
 import { PageProps } from "@/types";
 import { User } from "@/types/models";
-import { Head, useForm } from "@inertiajs/react";
+import { Head, router, useForm } from "@inertiajs/react";
 import { Loader2, Save } from "lucide-react";
-import { FormEventHandler } from "react";
+import { FormEventHandler, useEffect, useState } from "react";
 
 export default function Page(props: PageProps<{ auth: { user: User } }>) {
-  const { data, setData, put, processing } = useForm({
+  const { data, setData, post, processing, errors } = useForm({
     name: props.auth.user.name,
     address: props.auth.user.address,
+    image: null as File | null,
   });
+  const [previewImage, setPreviewImage] = useState<string | ArrayBuffer | null>(
+    null,
+  );
+
+  const { toast } = useToast();
+
+  useEffect(() => {
+    if (data.image) {
+      const reader = new FileReader();
+      reader.onload = () => setPreviewImage(reader.result);
+      reader.readAsDataURL(data.image);
+    }
+  }, [data.image]);
 
   const handleSubmit: FormEventHandler = (e) => {
     e.preventDefault();
-    put(route("dashboard.profile"));
+    post(route("dashboard.profile"), {
+      onSuccess: () => {
+        router.reload();
+        toast({
+          title: "Berhasil!",
+          description: "Perubahan profile berhasil disimpan!",
+        });
+      },
+    });
   };
 
   return (
@@ -62,12 +85,46 @@ export default function Page(props: PageProps<{ auth: { user: User } }>) {
               </CardHeader>
 
               <div className="px-6 space-y-2">
+                {(props.auth.user.image || previewImage) && (
+                  <img
+                    src={
+                      previewImage
+                        ? (previewImage as string)
+                        : props.auth.user.image
+                    }
+                    className="rounded-md h-56 object-cover w-full border"
+                  />
+                )}
+
+                <div className="space-y-1">
+                  <Label htmlFor="picture">Gambar restoran</Label>
+                  <Input
+                    onChange={(e) => {
+                      const files = e.target.files;
+                      if (files) {
+                        const image = files[0];
+                        setData({ ...data, image });
+                      }
+                    }}
+                    id="picture"
+                    type="file"
+                    accept="image/*"
+                    className="file:text-muted-foreground"
+                  />
+                  {errors.image && (
+                    <p className="text-sm text-destructive">{errors.image}</p>
+                  )}
+                </div>
+
                 <div className="space-y-1">
                   <Label>Nama lengkap</Label>
                   <Input
                     value={data.name}
                     onChange={(e) => setData({ ...data, name: e.target.value })}
                   />
+                  {errors.name && (
+                    <p className="text-sm text-destructive">{errors.name}</p>
+                  )}
                 </div>
 
                 <div className="space-y-1">
@@ -83,6 +140,9 @@ export default function Page(props: PageProps<{ auth: { user: User } }>) {
                       setData({ ...data, address: e.target.value })
                     }
                   />
+                  {errors.address && (
+                    <p className="text-sm text-destructive">{errors.address}</p>
+                  )}
                 </div>
               </div>
 

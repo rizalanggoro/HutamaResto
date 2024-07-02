@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
+import { Avatar, AvatarImage } from "@/Components/ui/avatar";
 import { Button } from "@/Components/ui/button";
 import { ScrollArea } from "@/Components/ui/scroll-area";
 import { Separator } from "@/Components/ui/separator";
@@ -97,8 +97,11 @@ export default function DashboardCustomerLayout({
             {/* profile */}
             <div className="flex gap-4 items-center">
               <Avatar>
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>CN</AvatarFallback>
+                {user?.image ? (
+                  <AvatarImage src={user.image} />
+                ) : (
+                  <AvatarImage src="https://github.com/shadcn.png" />
+                )}
               </Avatar>
               <div>
                 <p className="font-semibold">{user?.name}</p>
