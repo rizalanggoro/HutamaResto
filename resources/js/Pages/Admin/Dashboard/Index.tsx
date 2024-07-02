@@ -27,7 +27,6 @@ export default function Page(
       <Head title="Halaman Utama" />
       <DashboardAdminLayout>
         <div>
-          <p>{JSON.stringify(props.income)}</p>
           <BreadcrumbComponent items={[{ title: "Halaman utama" }]} />
 
           <p className="text-2xl font-semibold mt-4">
