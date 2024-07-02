@@ -9,6 +9,7 @@ import {
 } from "@/Components/ui/card";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
+import { Separator } from "@/Components/ui/separator";
 import { Textarea } from "@/Components/ui/textarea";
 import DashboardSuperAdminLayout from "@/Layouts/DashboardSuperAdmin";
 import { Head, useForm } from "@inertiajs/react";
@@ -20,6 +21,9 @@ export default function Page() {
     image: null as File | null,
     name: "",
     address: "",
+    adminName: "",
+    adminEmail: "",
+    adminPassword: "",
   });
 
   const [previewImage, setPreviewImage] = useState<string | null | ArrayBuffer>(
@@ -129,6 +133,74 @@ export default function Page() {
                   />
                   {errors.address && (
                     <p className="text-sm text-destructive">{errors.address}</p>
+                  )}
+                </div>
+
+                <div className="py-4">
+                  <Separator />
+                </div>
+
+                <div className="space-y-2 pb-4">
+                  <p className="font-semibold">Informasi Admin</p>
+                  <p className="text-muted-foreground text-sm">
+                    Masukkan beberapa informasi admin berikut untuk mengelola
+                    waralaba yang Anda buat
+                  </p>
+                </div>
+
+                {/* admin */}
+                <div className={"space-y-1"}>
+                  <Label>Nama admin</Label>
+                  <Input
+                    type="text"
+                    value={data.adminName}
+                    onChange={(e) =>
+                      setData({
+                        ...data,
+                        adminName: e.target.value,
+                      })
+                    }
+                  />
+                  {errors.adminName && (
+                    <p className="text-sm text-destructive">
+                      {errors.adminName}
+                    </p>
+                  )}
+                </div>
+                <div className={"space-y-1"}>
+                  <Label>Alamat email admin</Label>
+                  <Input
+                    type="email"
+                    value={data.adminEmail}
+                    onChange={(e) =>
+                      setData({
+                        ...data,
+                        adminEmail: e.target.value,
+                      })
+                    }
+                  />
+                  {errors.adminEmail && (
+                    <p className="text-sm text-destructive">
+                      {errors.adminEmail}
+                    </p>
+                  )}
+                </div>
+                <div className={"space-y-1"}>
+                  <Label>Kata sandi admin</Label>
+                  <Input
+                    type="password"
+                    value={data.adminPassword}
+                    onChange={(e) =>
+                      setData({
+                        ...data,
+                        adminPassword: e.target.value,
+                      })
+                    }
+                  />
+                  {errors.adminPassword && (
+                    <p className="text-sm text-destructive">
+                      {errors.adminPassword}
+                    </p>
                   )}
                 </div>
               </div>

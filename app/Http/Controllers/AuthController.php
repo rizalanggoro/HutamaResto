@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AdminFranchise;
 use App\Models\User;
+use DB;
 use Hash;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -45,6 +47,15 @@ class AuthController extends Controller {
       'password.required' => 'Kata sandi tidak boleh kosong!',
       'password.string' => 'Kata sandi tidak boleh kosong!'
     ]);
+
+    $user = User::whereEmail($request->email)->first();
+    if (!$user) {
+      return back()->withErrors(['email' => 'Informasi yang Anda masukkan tidak valid!']);
+    }
+
+    if (AdminFranchise::where('user_id', '=', $user->id)->count() === 0) {
+      return back()->withErrors(['email' => 'Informasi yang Anda masukkan tidak valid!']);
+    }
 
     if (Auth::attempt([
       'email' => $credentials['email'],

@@ -117,9 +117,9 @@ export default function Page(
                       >
                         <div className="space-y-1 col-span-8">
                           <p className="font-medium">{item.name}</p>
-                          <p className="font-medium text-sm text-muted-foreground line-clamp-2">
+                          {/* <p className="font-medium text-sm text-muted-foreground line-clamp-2">
                             {item.address}
-                          </p>
+                          </p> */}
                         </div>
                         <div className="col-span-4 flex items-center justify-end">
                           <Label>
