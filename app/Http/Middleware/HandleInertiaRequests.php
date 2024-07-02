@@ -28,7 +28,7 @@ class HandleInertiaRequests extends Middleware {
      */
     public function share(Request $request): array {
         $user = $request->user();
-        if ($user->image)
+        if ($user && $user->image)
             $user->image = Storage::disk('public')->url($user->image);
         return [
             ...parent::share($request),
