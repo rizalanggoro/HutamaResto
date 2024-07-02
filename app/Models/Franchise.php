@@ -24,4 +24,8 @@ class Franchise extends Model {
     public function users() {
         return $this->belongsToMany(User::class, 'admin_franchise');
     }
+
+    public function reviews() {
+        return $this->hasMany(Review::class, 'franchise_id');
+    }
 }

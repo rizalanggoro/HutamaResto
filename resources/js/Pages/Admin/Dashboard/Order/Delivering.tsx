@@ -49,30 +49,38 @@ export default function Page(
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {props.orders.map((order, index) => (
+                {props.orders.length > 0 ? (
+                  props.orders.map((order, index) => (
+                    <TableRow key={"delivering-item-" + index}>
+                      <TableCell>
+                        <p className="font-medium">{order.user.name}</p>
+                        <p className="text-muted-foreground">
+                          {order.user.address}
+                        </p>
+                      </TableCell>
+                      <TableCell className="flex items-center gap-1">
+                        <Button variant={"outline"} size={"icon"} asChild>
+                          <Link
+                            href={route(
+                              "admin.dashboard.order.delivering.detail",
+                              {
+                                id: order.id,
+                              },
+                            )}
+                          >
+                            <Eye className="w-4 h-4" />
+                          </Link>
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
                   <TableRow>
-                    <TableCell>
-                      <p className="font-medium">{order.user.name}</p>
-                      <p className="text-muted-foreground">
-                        {order.user.address}
-                      </p>
-                    </TableCell>
-                    <TableCell className="flex items-center gap-1">
-                      <Button variant={"outline"} size={"icon"} asChild>
-                        <Link
-                          href={route(
-                            "admin.dashboard.order.delivering.detail",
-                            {
-                              id: order.id,
-                            },
-                          )}
-                        >
-                          <Eye className="w-4 h-4" />
-                        </Link>
-                      </Button>
+                    <TableCell colSpan={2} className="text-center">
+                      Tidak ada data
                     </TableCell>
                   </TableRow>
-                ))}
+                )}
               </TableBody>
             </Table>
           </Card>

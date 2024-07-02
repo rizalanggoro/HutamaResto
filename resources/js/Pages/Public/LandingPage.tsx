@@ -39,10 +39,10 @@ export default function LandingPage(
                   Daftar menu
                 </Link>
               </Button>
-              <Button variant={"outline"}>
+              {/* <Button variant={"outline"}>
                 <Percent className="w-4 h-4 mr-2" />
                 Daftar promo
-              </Button>
+              </Button> */}
             </div>
           </section>
 

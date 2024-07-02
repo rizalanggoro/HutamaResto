@@ -42,7 +42,7 @@ export default function Page(
             </p>
           </div>
 
-          <Card className="mt-8">
+          <Card className="mt-8 overflow-hidden">
             <CardHeader className="bg-muted/70">
               <CardTitle className="text-lg">
                 {props.order.franchise.name}
