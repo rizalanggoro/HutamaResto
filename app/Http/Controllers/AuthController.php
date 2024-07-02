@@ -53,8 +53,10 @@ class AuthController extends Controller {
       return back()->withErrors(['email' => 'Informasi yang Anda masukkan tidak valid!']);
     }
 
-    if (AdminFranchise::where('user_id', '=', $user->id)->count() === 0) {
-      return back()->withErrors(['email' => 'Informasi yang Anda masukkan tidak valid!']);
+    if ($request->role === 'admin') {
+      if (AdminFranchise::where('user_id', '=', $user->id)->count() === 0) {
+        return back()->withErrors(['email' => 'Informasi yang Anda masukkan tidak valid!']);
+      }
     }
 
     if (Auth::attempt([
