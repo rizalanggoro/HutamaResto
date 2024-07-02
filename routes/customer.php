@@ -28,8 +28,13 @@ Route::middleware([CustomerAuthMiddleware::class])->group(function () {
             ->name('dashboard.order.delete');
 
         // review
-        Route::get('review', [CustomerReviewController::class, 'show'])->name('dashboard.review');
-        Route::post('review', [CustomerReviewController::class, 'create']);
+        Route::prefix('review')->group(function () {
+            Route::get('/', [CustomerReviewController::class, 'show'])
+                ->name('dashboard.review');
+            Route::post('/', [CustomerReviewController::class, 'create']);
+            Route::delete('delete/{id}', [CustomerReviewController::class, 'delete'])
+                ->name('dashboard.review.delete');
+        });
 
         // payment
         Route::post('payment/upload-receipt', [CustomerPaymentController::class, 'uploadReceipt'])->name('dashboard.payment.uploadReceipt');

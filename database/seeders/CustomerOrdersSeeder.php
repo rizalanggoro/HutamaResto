@@ -33,5 +33,21 @@ class CustomerOrdersSeeder extends Seeder {
                 ]);
             }
         }
+
+        for ($a = 0; $a < 7; $a++) {
+            $order = Order::create([
+                'user_id' => $customer->id,
+                'franchise_id' => $franchise->id,
+                'status' => 'done',
+            ]);
+
+            for ($b = 0; $b < rand(1, count($menus)); $b++) {
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'menu_id' => $menus[$b]->id,
+                    'count' => rand(1, 5),
+                ]);
+            }
+        }
     }
 }

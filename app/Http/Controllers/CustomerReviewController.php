@@ -34,4 +34,9 @@ class CustomerReviewController extends Controller {
             return response(null, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    public function delete($id) {
+        $review = Review::whereId($id)->firstOrFail();
+        $review->delete();
+    }
 }

@@ -10,7 +10,10 @@ class Franchise extends Model {
     use HasFactory;
 
     protected $fillable = [
-        'name', 'address', 'is_open',
+        'name',
+        'address',
+        'image',
+        'is_open',
     ];
 
     public function menus(): HasMany {

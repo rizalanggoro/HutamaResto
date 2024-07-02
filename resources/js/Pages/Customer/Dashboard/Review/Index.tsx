@@ -1,4 +1,13 @@
 import BreadcrumbComponent from "@/Components/Breadcrumb";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/Components/ui/alert-dialog";
 import { Button } from "@/Components/ui/button";
 import { Card, CardHeader } from "@/Components/ui/card";
 import { Label } from "@/Components/ui/label";
@@ -7,8 +16,9 @@ import DashboardCustomerLayout from "@/Layouts/DashboardCustomer";
 import { cn } from "@/lib/utils";
 import { PageProps } from "@/types";
 import { Franchise, Review } from "@/types/models";
-import { Head, Link } from "@inertiajs/react";
-import { ChevronRight, Edit2, Star, Trash } from "lucide-react";
+import { Head, Link, router, useForm } from "@inertiajs/react";
+import { ChevronRight, Edit2, Loader2, Star, Trash } from "lucide-react";
+import { useState } from "react";
 import { FormattedDate } from "react-intl";
 
 export default function Page(
@@ -16,6 +26,11 @@ export default function Page(
     reviews: (Review & { franchise: Franchise })[];
   }>,
 ) {
+  const [selectedReview, setSelectedReview] = useState<Review>();
+  const [isDialogConfirmDeleteReviewOpen, setIsDialogConfirmDeleteReviewOpen] =
+    useState(false);
+  const formDeleteReview = useForm();
+
   return (
     <>
       <Head title="Ulasan Saya" />
@@ -74,6 +89,10 @@ export default function Page(
                           size={"icon"}
                           variant={"destructive"}
                           className="h-8 w-8"
+                          onClick={() => {
+                            setSelectedReview(review);
+                            setIsDialogConfirmDeleteReviewOpen(true);
+                          }}
                         >
                           <Trash className="w-4 h-4" />
                         </Button>
@@ -105,6 +124,44 @@ export default function Page(
           </div>
         </div>
       </DashboardCustomerLayout>
+
+      <AlertDialog
+        open={isDialogConfirmDeleteReviewOpen}
+        onOpenChange={(e) => setIsDialogConfirmDeleteReviewOpen(e)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Konfirmasi Penghapusan</AlertDialogTitle>
+            <AlertDialogDescription>
+              Apakah Anda yakin akan menghapus ulasan ini? Tindakan Anda tidak
+              dapat dipulihkan
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Batal</AlertDialogCancel>
+            <Button
+              disabled={formDeleteReview.processing}
+              variant={"destructive"}
+              onClick={() =>
+                formDeleteReview.delete(
+                  route("dashboard.review.delete", { id: selectedReview?.id }),
+                  {
+                    onSuccess: () => {
+                      setIsDialogConfirmDeleteReviewOpen(false);
+                      router.reload();
+                    },
+                  },
+                )
+              }
+            >
+              {formDeleteReview.processing && (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              )}
+              Hapus
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }
