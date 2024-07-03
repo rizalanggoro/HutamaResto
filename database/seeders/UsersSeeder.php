@@ -13,6 +13,7 @@ class UsersSeeder extends Seeder {
         User::factory()->create([
             'name' => 'Customer User',
             'email' => 'customer@example.com',
+            'address' => fake()->address(),
         ]);
 
         for ($a = 0; $a < 5; $a++) {

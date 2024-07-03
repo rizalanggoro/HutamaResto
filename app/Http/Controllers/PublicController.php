@@ -43,10 +43,14 @@ class PublicController extends Controller {
                 $item->image = Storage::disk('public')->url($item->image);
                 return $item;
             });
+        $reviews = $franchise->reviews()
+            ->orderBy('created_at', 'desc')
+            ->with(['user'])
+            ->get();
 
         return Inertia::render(
             'Public/Franchise/Detail',
-            compact('franchise', 'menus')
+            compact('franchise', 'menus', 'reviews')
         );
     }
 

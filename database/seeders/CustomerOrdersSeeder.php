@@ -8,6 +8,7 @@ use App\Models\OrderItem;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Storage;
 
 class CustomerOrdersSeeder extends Seeder {
     /**
@@ -22,7 +23,8 @@ class CustomerOrdersSeeder extends Seeder {
             $order = Order::create([
                 'user_id' => $customer->id,
                 'franchise_id' => $franchise->id,
-                'status' => $a % 2 == 0 ? 'waiting_payment' : 'waiting_payment_verification',
+                'status' => $a % 2 === 0 ? 'waiting_payment' : 'waiting_payment_verification',
+                'receipt_path' => $a % 2 === 0 ? null : Storage::disk('public')->url('seeder/receipts/bukti transer.jpg'),
             ]);
 
             for ($b = 0; $b < rand(1, count($menus)); $b++) {

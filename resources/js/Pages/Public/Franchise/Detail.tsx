@@ -2,18 +2,26 @@ import ContainerComponent from "@/Components/Container";
 import MenuItemComponent from "@/Components/MenuItem";
 import NavbarComponent from "@/Components/Navbar";
 import { Button } from "@/Components/ui/button";
+import { Progress } from "@/Components/ui/progress";
 import { Separator } from "@/Components/ui/separator";
 import { PageProps } from "@/types";
-import { Franchise, Menu } from "@/types/models";
+import { Franchise, Menu, Review } from "@/types/models";
 import { Head, Link } from "@inertiajs/react";
-import { LandPlot, Send } from "lucide-react";
+import { Send } from "lucide-react";
+import { FormattedNumber } from "react-intl";
 
 export default function Page(
   props: PageProps<{
     franchise: Franchise;
     menus: Menu[];
+    reviews: Review[];
   }>,
 ) {
+  const rate =
+    (props.reviews.reduce((prev, curr) => prev + curr.star, 0) /
+      (props.reviews.length * 5)) *
+    5;
+
   return (
     <>
       <Head title="Detail Restoran" />
@@ -32,10 +40,10 @@ export default function Page(
           </div>
 
           <div className="flex items-center justify-end gap-2 mt-4">
-            <Button variant={"outline"}>
+            {/* <Button variant={"outline"}>
               <LandPlot className="w-4 h-4 mr-2" />
               Reservasi tempat
-            </Button>
+            </Button> */}
             <Button variant={"outline"} asChild>
               <Link
                 href={route("dashboard.order.create.chooseMenu", {
@@ -46,6 +54,34 @@ export default function Page(
                 Pesan sekarang
               </Link>
             </Button>
+          </div>
+
+          <div className="mt-8 flex items-center max-w-xs gap-8">
+            <p className="text-5xl font-semibold">
+              <FormattedNumber
+                minimumFractionDigits={1}
+                maximumFractionDigits={1}
+                value={props.reviews.length > 0 ? rate : 0}
+              />
+            </p>
+            <div className="w-full">
+              {Array.from({ length: 5 }).map((_, index) => (
+                <div key={"star-line-" + index}>
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-medium w-4">{5 - index}</p>
+                    <Progress
+                      value={
+                        (props.reviews.filter((it) => it.star === 5 - index)
+                          .length /
+                          props.reviews.length) *
+                        100
+                      }
+                      className="h-2"
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
           <Separator className="my-8" />

@@ -17,6 +17,7 @@ class Order extends Model {
         'status',
         'message',
         'type',
+        'receipt_path',
     ];
 
     public function franchise(): BelongsTo {
