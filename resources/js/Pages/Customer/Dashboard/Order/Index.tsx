@@ -418,7 +418,8 @@ export default function Page(
                 {selectedOrder?.franchise.name ?? "-"}
               </span>
               . Bukti pembayaran dapat berupa screenshot transfer atau yang
-              lainnya
+              lainnya. Pembayaran dapat ditransfer ke rekening{" "}
+              <span className="font-semibold">1182-9812-9182-7643</span>.
             </DialogDescription>
           </DialogHeader>
 
