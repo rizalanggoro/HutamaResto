@@ -2,19 +2,27 @@ import ContainerComponent from "@/Components/Container";
 import MenuItemComponent from "@/Components/MenuItem";
 import NavbarComponent from "@/Components/Navbar";
 import { Button } from "@/Components/ui/button";
+import { Card, CardHeader } from "@/Components/ui/card";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/Components/ui/collapsible";
+import { Label } from "@/Components/ui/label";
 import { Progress } from "@/Components/ui/progress";
 import { Separator } from "@/Components/ui/separator";
+import { cn } from "@/lib/utils";
 import { PageProps } from "@/types";
-import { Franchise, Menu, Review } from "@/types/models";
+import { Franchise, Menu, Review, User } from "@/types/models";
 import { Head, Link } from "@inertiajs/react";
-import { Send } from "lucide-react";
-import { FormattedNumber } from "react-intl";
+import { Send, Star } from "lucide-react";
+import { FormattedDate, FormattedNumber } from "react-intl";
 
 export default function Page(
   props: PageProps<{
     franchise: Franchise;
     menus: Menu[];
-    reviews: Review[];
+    reviews: (Review & { user: User })[];
   }>,
 ) {
   const rate =
@@ -83,6 +91,52 @@ export default function Page(
               ))}
             </div>
           </div>
+
+          <Collapsible className="mt-8">
+            <CollapsibleTrigger asChild>
+              <Button className="w-full" variant={"link"}>
+                Lihat ulasan
+              </Button>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <div className="grid grid-cols-2 gap-2 mt-8">
+                {props.reviews.map((review, index) => (
+                  <Card key={"review-item-" + index}>
+                    <CardHeader className="p-4 space-y-4">
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <div className="flex items-center gap-1">
+                            {Array.from({ length: 5 }).map((_, index) => (
+                              <Star
+                                key={"star-item-" + index}
+                                className={cn(
+                                  "w-4 h-4",
+                                  index < review.star
+                                    ? "text-primary"
+                                    : "text-muted-foreground/40",
+                                )}
+                              />
+                            ))}
+                          </div>
+                          <p className="text-muted-foreground text-xs">
+                            <FormattedDate
+                              value={review.created_at}
+                              dateStyle="full"
+                            />
+                          </p>
+                        </div>
+                        <p>{review.review}</p>
+                      </div>
+                      <Separator />
+                      <div>
+                        <Label className="text-xs">{review.user.name}</Label>
+                      </div>
+                    </CardHeader>
+                  </Card>
+                ))}
+              </div>
+            </CollapsibleContent>
+          </Collapsible>
 
           <Separator className="my-8" />
 

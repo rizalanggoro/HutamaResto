@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Franchise;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Review;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -50,6 +51,14 @@ class CustomerOrdersSeeder extends Seeder {
                     'count' => rand(1, 5),
                 ]);
             }
+
+            Review::create([
+                'star' => rand(1, 5),
+                'review' => fake()->sentence(),
+                'user_id' => $customer->id,
+                'order_id' => $order->id,
+                'franchise_id' => $franchise->id,
+            ]);
         }
     }
 }
