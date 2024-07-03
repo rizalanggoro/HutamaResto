@@ -169,7 +169,7 @@ export default function Page(
           <DialogFooter>
             <img
               src={selectedOrder?.receipt_path}
-              className="h-72 w-full object-cover"
+              className="h-96 w-full object-contain"
             />
           </DialogFooter>
         </DialogContent>

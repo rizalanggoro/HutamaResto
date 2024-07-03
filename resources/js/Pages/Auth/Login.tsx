@@ -12,11 +12,11 @@ import { FormEventHandler, useState } from "react";
 export default function Login(
   props: PageProps<{
     role: "customer" | "admin" | "superadmin" | string;
-  }>
+  }>,
 ) {
   const { data, setData, errors, post, processing } = useForm({
-    email: "customer@example.com",
-    password: "password",
+    email: "",
+    password: "",
     role: props.role,
   });
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);

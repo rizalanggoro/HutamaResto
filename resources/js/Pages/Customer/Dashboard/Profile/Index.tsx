@@ -97,7 +97,7 @@ export default function Page(props: PageProps<{ auth: { user: User } }>) {
                 )}
 
                 <div className="space-y-1">
-                  <Label htmlFor="picture">Gambar restoran</Label>
+                  <Label htmlFor="picture">Gambar profile</Label>
                   <Input
                     onChange={(e) => {
                       const files = e.target.files;
